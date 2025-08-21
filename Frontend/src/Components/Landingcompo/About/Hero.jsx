@@ -2,9 +2,9 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <div className=" container flex mt-20  flex-col px-10 md:px-40  md:items-center gap-5">   
-      <div className="border-b border-gray-300 w-[80%]   flex pb-30 items-center justify-center">
-        <h4 className="text-2xl font-semibold opacity-80">
+    <div className=" container flex mt-15  flex-col px-10 md:px-40  md:items-center gap-5 max-sm:px-5">   
+      <div className="border-b border-gray-300 w-[80%] max-sm:[100%] max-sm:text-center  flex pb-30 md:items-center md:justify-center">
+        <h4 className="text-2xl max-sm:text-lg font-semibold opacity-80">
           We pioneered the discount broking model in India. <br /> Now, we are breaking
           ground with our technology.
         </h4>

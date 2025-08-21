@@ -33,9 +33,23 @@ import streakLogo from "./streakLogo.png";
 import varsity from "./varsity.png";
 import varsitys from "./varsitys.png";
 import zerodhaFundhouse from "./zerodhaFundhouse.png";
+import hasan from "./Hasan.svg.jpg";
+import seema from "./Seema.svg.jpg";
+import Kailash from "./Kailash.svg.jpg";
+import Venu from "./Venu.svg.jpg";
+import Nikhil  from "./Nikhil.svg.jpg";
+import Karthik from "./Karthik.jpg";
+import Austin from "./Austin.svg.jpg";
 
 
 export const assets = {
+    hasan,
+    seema,
+    Kailash,
+    Karthik,
+    Venu,
+    Nikhil,
+    Austin,
     appstoreBadge,
     kiteconnectSvg,
     kiteconnectPng,

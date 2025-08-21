@@ -8,6 +8,7 @@ import Homepage from "./Pages/Landingpages/Homepage";
 import Productpage from "./Pages/Landingpages/Productpage";
 import Pricingpage from "./Pages/Landingpages/Pricingpage";
 import Supportpage from "./Pages/Landingpages/Supportpage";
+import Aboutpage from "./Pages/Landingpages/Aboutpage";
 
 import Signuppage from "./Pages/Commonpages/Signuppage";
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/Productpage" element={<Productpage />} />
           <Route path="/Pricingpage" element={<Pricingpage />} />
           <Route path="/Supportpage" element={<Supportpage />} />
+          <Route path="/Aboutpage" element={<Aboutpage/>} />
         </Route>
 
         <Route element={<Commonpagelayout />}>

@@ -31,6 +31,7 @@ import signup from "./signup.png";
 import smallcaseLogo from "./smallcaseLogo.png";
 import streakLogo from "./streakLogo.png";
 import varsity from "./varsity.png";
+import varsitys from "./varsitys.png";
 import zerodhaFundhouse from "./zerodhaFundhouse.png";
 
 
@@ -67,5 +68,6 @@ export const assets = {
     smallcaseLogo,
     streakLogo,
     varsity,
+    varsitys,
     zerodhaFundhouse
 };

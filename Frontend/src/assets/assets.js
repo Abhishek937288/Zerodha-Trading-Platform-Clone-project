@@ -40,9 +40,13 @@ import Venu from "./Venu.svg.jpg";
 import Nikhil  from "./Nikhil.svg.jpg";
 import Karthik from "./Karthik.jpg";
 import Austin from "./Austin.svg.jpg";
+import Productkite from "./products-kite.png";
+import tijori from "./tijori.svg";
 
 
 export const assets = {
+    tijori,
+    Productkite,
     hasan,
     seema,
     Kailash,

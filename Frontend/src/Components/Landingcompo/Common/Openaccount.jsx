@@ -3,7 +3,7 @@ import { assets } from '../../../assets/assets'
 
 const Openaccount = () => {
   return (
-    <div className=" container mt-10 mb-20 flex flex-col justify-center items-center ">
+    <div className=" container mt-20 mb-20 flex flex-col justify-center items-center ">
     
       <div className="flex justify-center items-center flex-col gap-5 text-center">
         <h1 className="text-3xl font-semibold opacity-70 max-md:text-2xl max-sm:text-xl ">

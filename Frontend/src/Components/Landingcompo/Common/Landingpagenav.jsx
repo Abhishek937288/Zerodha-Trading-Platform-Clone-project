@@ -41,7 +41,7 @@ const Landingpagenav = () => {
             ></i>
           </div>
           {isOpen && (
-            <div className=" absolute w-[90vw] top-12 right-4 sm:right-13  h-[90vh] bg-white border border-slate-200 md:w-[55vw] md:h-[70vh] rounded-lg">
+            <div className=" absolute w-[80vw] top-12 right-4 sm:right-13  h-[85vh] bg-white border border-slate-200 md:w-[55vw] md:h-[70vh] rounded-lg">
               <div className="flex flex-row-reverse pr-3 sm:hidden">
                 <button
                 className = "text-lg font-semibold opacity-80 cursor-pointer"
@@ -51,7 +51,7 @@ const Landingpagenav = () => {
                   }}
                   
                 >
-                  <i className="fa-solid fa-xmark fa-xl"></i>
+                  <i className="fa-solid fa-xmark fa-lg"></i>
                 </button>
               </div>
 

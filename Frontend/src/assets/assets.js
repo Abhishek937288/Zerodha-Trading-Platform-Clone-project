@@ -42,9 +42,12 @@ import Karthik from "./Karthik.jpg";
 import Austin from "./Austin.svg.jpg";
 import Productkite from "./products-kite.png";
 import tijori from "./tijori.svg";
-
+import loginImg from "./loginImg.png";
+import signupImg  from "./signupImg.png"
 
 export const assets = {
+    signupImg,
+    loginImg,
     tijori,
     Productkite,
     hasan,

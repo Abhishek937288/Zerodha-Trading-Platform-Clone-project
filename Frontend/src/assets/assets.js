@@ -43,9 +43,14 @@ import Austin from "./Austin.svg.jpg";
 import Productkite from "./products-kite.png";
 import tijori from "./tijori.svg";
 import loginImg from "./loginImg.png";
-import signupImg  from "./signupImg.png"
-
+import signupImg  from "./signupImg.png";
+import verifyOtp from "./verifyOtp.png";
+import forgotpass from "./forgotpass.png";
+import newPass from "./newPass.png";
 export const assets = {
+    newPass,
+    forgotpass,
+    verifyOtp,
     signupImg,
     loginImg,
     tijori,

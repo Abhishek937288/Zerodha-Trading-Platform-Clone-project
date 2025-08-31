@@ -1,8 +1,17 @@
 import bcrypt from "bcrypt";
 import userModel from "../Models/usersModel.js";
 import { signupSchema } from "../Validation/signupValidation.js";
-import { sendVerificationEmail  ,sendwelcomeEmail } from "../Resend/email.js";
+import { signinSchema } from "../Validation/signInvalidation.js";
+import {
+  sendVerificationEmail,
+  sendwelcomeEmail,
+  sendForgotpassLink,
+  updatePassword
+} from "../Resend/email.js";
 import { verificationToken, expToken } from "../Utils/verifyToken.js";
+import genandsetToken from "../Utils/gensetToken.js";
+import env from "envgaurd";
+const frontendUrl = env("FRONTEND_URL");
 
 export const signup = async (req, res) => {
   const { value, error } = signupSchema.validate(req.body);
@@ -59,20 +68,20 @@ export const verifyemail = async (req, res) => {
       verificationTokenEpiresAt: { $gt: Date.now() },
     });
     if (!user) {
-      return res
-        .status(401)
-        .json({
-          data: null,
-          success: false,
-          message: "invalid token or expired token",
-        });
+      return res.status(401).json({
+        data: null,
+        success: false,
+        message: "invalid token or expired token",
+      });
     }
+
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenEpiresAt = undefined;
     await user.save();
+    genandsetToken(user._id, res);
 
-   await sendwelcomeEmail(user.email,user.username);
+    await sendwelcomeEmail(user.email, user.username);
 
     return res.status(200).json({
       data: null,
@@ -88,3 +97,125 @@ export const verifyemail = async (req, res) => {
     });
   }
 };
+
+export const signin = async (req, res) => {
+  const { value, error } = signinSchema.validate(req.body);
+  if (error) {
+    return res
+      .status(400)
+      .json({ data: null, success: false, message: error.details[0].message });
+  }
+  const { email, password } = value;
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    return res.status(400).json({
+      data: null,
+      success: false,
+      message: "invalid user or password",
+    });
+  }
+
+  const isVerified = bcrypt.compare(password, user.password);
+  if (!isVerified) {
+    return res
+      .status(400)
+      .json({ data: null, success: false, message: "incorrect password" });
+  }
+
+  genandsetToken(user._id, res);
+  const { password: _, ...userWithoutPassword } = user._doc;
+
+  return res.status(200).json({
+    data: userWithoutPassword,
+    success: false,
+    message: "user logged in successfully",
+  });
+};
+
+export const forgotpassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      data: null,
+      success: false,
+      message: "please enter your email id",
+    });
+  }
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    return res
+      .status(400)
+      .json({ data: null, success: false, message: "invalid email id " });
+  }
+
+  const resetPasswordToken = verificationToken();
+  const tokenExpiry = expToken();
+
+  user.resetPasswordToken = resetPasswordToken;
+  user.resetPasswordTokenEpiresAt = tokenExpiry;
+
+  await user.save();
+
+  const url = `${frontendUrl}/:${resetPasswordToken}`; // to send request on the frontendurl
+
+  sendForgotpassLink(user.email, url);
+
+  return res
+    .status(200)
+    .json({
+      data: null,
+      success: true,
+      message: "forgot password link share on mail",
+    });
+};
+
+export const newPassword = async (req, res) => {
+  const {forgotpasswordToken} = req.body; // need to this from the req.params (not testing purpose only)
+  const { newPassword } = req.body;
+  if (!newPassword) {
+    return res
+      .status(400)
+      .json({ data: null, success: false, message: "please enter password" });
+  }
+  const user = await userModel.findOne({
+    resetPasswordToken: forgotpasswordToken,
+    resetPasswordTokenEpiresAt: { $gt: Date.now() },
+  });
+  if (!user) {
+    return res
+      .status(400)
+      .json({ data: null, success: false, message: "invlaid request or token expired" });
+  }
+  if (!user.isVerified) {
+    return res
+      .status(400)
+      .json({ data: null, success: false, message: "user is not verified" });
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  user.password = hashedPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordTokenEpiresAt = undefined;
+
+  await user.save();
+  updatePassword(user.email, user.username);
+  
+  return res.status(200).json({data:null,success:true,message:"password updated succesfull"});
+
+};
+
+
+export const  checkAuth = async(req,res)=>{
+  try{
+    const user = await userModel.findById(req.userId);
+    if(!user){
+      return res.status(401).json({data:null, success:false , message:"user not found"});
+    }
+  const { password: _, ...userWithoutPassword } = user._doc;
+  return res.status(201).json({data:userWithoutPassword,success:true,message:"user found succesfully"});
+  }catch(err){
+  console.log(err.message);
+  return res.status(401).json({data:null, success:false , message:err.message})
+  }
+}

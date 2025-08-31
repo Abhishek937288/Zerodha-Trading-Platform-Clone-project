@@ -5,6 +5,7 @@ import env from "envgaurd";
 import connectDb from "./Config/db.js";
 import cors from "cors";
 import authRoues from "./Routes/authRoutes.js";
+import genandsetToken from "./Utils/gensetToken.js";
 
 
 const PORT = env("PORT", 5000);

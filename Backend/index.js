@@ -4,9 +4,8 @@ import "dotenv/config";
 import env from "envgaurd";
 import connectDb from "./Config/db.js";
 import cors from "cors";
-import authRoues from "./Routes/authRoutes.js";
-import genandsetToken from "./Utils/gensetToken.js";
-
+import authRoutes from "./Routes/authRoutes.js";
+import stocksRoute from "./Routes/stocksRoute.js";
 
 const PORT = env("PORT", 5000);
 const FRONTEND_URL = env("FRONTEND_URL");
@@ -14,6 +13,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(
   cors({
     origin: [FRONTEND_URL],
@@ -22,8 +22,8 @@ app.use(
   })
 );
 
-app.use("/api/auth",authRoues);
-
+app.use("/api/auth", authRoutes);
+app.use("/api/stocks", stocksRoute);
 
 connectDb();
 

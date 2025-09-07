@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { assets } from "@/assets/assets";
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { signinFn } from "@/Mutation/authMutationFn";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const Signinpage = () => {
   const navigate = useNavigate();
@@ -20,19 +23,27 @@ const Signinpage = () => {
     }));
   };
 
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: signinFn,
+    onSuccess: (response) => {
+      toast.success(`${response.message}`);
+      navigate("/");
+      setFormData({ email: "", password: "" });
+    },
+    onError: (error) => {
+      console.log(error.response.data.message);
+      toast.error(`${error.response?.data?.message}`);
+    },
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      email: "",
-      password: "",
-    });
+    mutate(formData);
   };
 
   return (
     <div className="w-full bg-slate-300 min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
       <div className="container grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl md:h-[90%] bg-white px-6 py-8 rounded-2xl shadow-md">
-        
         <div className="flex flex-col justify-center items-center w-full">
           <form className="flex flex-col gap-5 w-full max-w-sm">
             <div>
@@ -77,8 +88,9 @@ const Signinpage = () => {
               <button
                 className="w-full outline-none bg-blue-600 text-white rounded-lg px-5 py-2 hover:bg-blue-700 transition"
                 onClick={handleSubmit}
+                disabled={isPending}
               >
-                Login
+                {isPending ? "Login..." : "Login"}
               </button>
             </div>
             <p>
@@ -94,14 +106,14 @@ const Signinpage = () => {
               </a>
             </p>
             <a
-                href="" 
-                className="text-red-700 text-sm  opacity-90"
-                onClick={() => {
-                  navigate("/Forgotpasspage");
-                }}
-              >
-               Forgot password
-              </a>
+              href=""
+              className="text-red-700 text-sm  opacity-90"
+              onClick={() => {
+                navigate("/Forgotpasspage");
+              }}
+            >
+              Forgot password
+            </a>
           </form>
         </div>
         <div className="flex items-center justify-center">
@@ -111,7 +123,6 @@ const Signinpage = () => {
             className="max-h-[300px] md:max-h-full object-contain"
           />
         </div>
-
       </div>
     </div>
   );

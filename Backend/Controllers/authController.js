@@ -6,9 +6,9 @@ import {
   sendVerificationEmail,
   sendwelcomeEmail,
   sendForgotpassLink,
-  updatePassword
+  updatePassword,
 } from "../Resend/email.js";
-import { verificationToken, expToken } from "../Utils/verifyToken.js";
+import { verificationToken, genTokenExp } from "../Utils/verifyToken.js";
 import genandsetToken from "../Utils/gensetToken.js";
 import env from "envgaurd";
 const frontendUrl = env("FRONTEND_URL");
@@ -37,14 +37,14 @@ export const signup = async (req, res) => {
   });
 
   const verifyToken = verificationToken();
-  const verifyokenEpiresAt = expToken();
+  const verifyokenEpiresAt = genTokenExp();
   user.verificationToken = verifyToken;
-  user.verificationTokenEpiresAt = verifyokenEpiresAt;
+  user.verificationTokenExpiresAt = verifyokenEpiresAt;
   await sendVerificationEmail(email, verifyToken);
 
-  const { password: _, ...userWithoutpassword } = user._doc;
-
   await user.save();
+
+  const { password: _, ...userWithoutpassword } = user._doc;
 
   return res.status(200).json({
     data: userWithoutpassword,
@@ -65,7 +65,7 @@ export const verifyemail = async (req, res) => {
     }
     const user = await userModel.findOne({
       verificationToken: code,
-      verificationTokenEpiresAt: { $gt: Date.now() },
+      verificationTokenExpiresAt: { $gt: Date.now() },
     });
     if (!user) {
       return res.status(401).json({
@@ -77,7 +77,7 @@ export const verifyemail = async (req, res) => {
 
     user.isVerified = true;
     user.verificationToken = undefined;
-    user.verificationTokenEpiresAt = undefined;
+    user.verificationTokenExpiresAt = undefined;
     await user.save();
     genandsetToken(user._id, res);
 
@@ -115,7 +115,7 @@ export const signin = async (req, res) => {
     });
   }
 
-  const isVerified = bcrypt.compare(password, user.password);
+  const isVerified = await bcrypt.compare(password, user.password);
   if (!isVerified) {
     return res
       .status(400)
@@ -149,28 +149,26 @@ export const forgotpassword = async (req, res) => {
   }
 
   const resetPasswordToken = verificationToken();
-  const tokenExpiry = expToken();
+  const tokenExpiry = genTokenExp();
 
   user.resetPasswordToken = resetPasswordToken;
-  user.resetPasswordTokenEpiresAt = tokenExpiry;
+  user.resetPasswordTokenExpiresAt = tokenExpiry;
 
   await user.save();
 
-  const url = `${frontendUrl}/:${resetPasswordToken}`; // to send request on the frontendurl
+  const url = `${frontendUrl}/Newpasswordpage/${resetPasswordToken}`;
 
   sendForgotpassLink(user.email, url);
 
-  return res
-    .status(200)
-    .json({
-      data: null,
-      success: true,
-      message: "forgot password link share on mail",
-    });
+  return res.status(200).json({
+    data: null,
+    success: true,
+    message: "forgot password link shared on mail",
+  });
 };
 
 export const newPassword = async (req, res) => {
-  const {forgotpasswordToken} = req.body; // need to this from the req.params (not testing purpose only)
+  const { forgotpasstoken } = req.params;
   const { newPassword } = req.body;
   if (!newPassword) {
     return res
@@ -178,13 +176,17 @@ export const newPassword = async (req, res) => {
       .json({ data: null, success: false, message: "please enter password" });
   }
   const user = await userModel.findOne({
-    resetPasswordToken: forgotpasswordToken,
-    resetPasswordTokenEpiresAt: { $gt: Date.now() },
+    resetPasswordToken: forgotpasstoken,
+    resetPasswordTokenExpiresAt: { $gt: Date.now() },
   });
   if (!user) {
     return res
       .status(400)
-      .json({ data: null, success: false, message: "invlaid request or token expired" });
+      .json({
+        data: null,
+        success: false,
+        message: "invlaid request or token expired",
+      });
   }
   if (!user.isVerified) {
     return res
@@ -196,26 +198,40 @@ export const newPassword = async (req, res) => {
 
   user.password = hashedPassword;
   user.resetPasswordToken = undefined;
-  user.resetPasswordTokenEpiresAt = undefined;
+  user.resetPasswordTokenExpiresAt = undefined;
 
   await user.save();
   updatePassword(user.email, user.username);
-  
-  return res.status(200).json({data:null,success:true,message:"password updated succesfull"});
 
+  return res
+    .status(200)
+    .json({
+      data: null,
+      success: true,
+      message: "password updated succesfull",
+    });
 };
 
-
-export const  checkAuth = async(req,res)=>{
-  try{
+export const checkAuth = async (req, res) => {
+  try {
     const user = await userModel.findById(req.userId);
-    if(!user){
-      return res.status(401).json({data:null, success:false , message:"user not found"});
+    if (!user) {
+      return res
+        .status(401)
+        .json({ data: null, success: false, message: "user not found" });
     }
-  const { password: _, ...userWithoutPassword } = user._doc;
-  return res.status(201).json({data:userWithoutPassword,success:true,message:"user found succesfully"});
-  }catch(err){
-  console.log(err.message);
-  return res.status(401).json({data:null, success:false , message:err.message})
+    const { password: _, ...userWithoutPassword } = user._doc;
+    return res
+      .status(201)
+      .json({
+        data: userWithoutPassword,
+        success: true,
+        message: "user found succesfully",
+      });
+  } catch (err) {
+    console.log(err.message);
+    return res
+      .status(401)
+      .json({ data: null, success: false, message: err.message });
   }
-}
+};

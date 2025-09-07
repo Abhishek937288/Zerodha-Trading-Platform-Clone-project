@@ -1,0 +1,38 @@
+import axios from "axios";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+export const signupFn = async (formdata) => {
+  const url = `${backendUrl}/api/auth/signup`;
+  const { data } = await axios.post(url, formdata, {
+    withCredentials: true,
+  });
+  return data;
+};
+
+export const verifyEmailFn = async (code) => {
+  const url = `${backendUrl}/api/auth/verifyemail`;
+  const { data } = await axios.post(url, code, { withCredentials: true });
+  return data;
+};
+
+export const signinFn = async (formdata) => {
+  const url = `${backendUrl}/api/auth/signin`;
+  const { data } = await axios.post(url, formdata, { withCredentials: true });
+  return data;
+};
+
+export const forgotPassFn = async (formdata) => {
+  const url = `${backendUrl}/api/auth/forgotpassword`;
+  const { data } = await axios.post(url, formdata, { withCredentials: true });
+  return data;
+};
+
+export const newPasswordFn = async ({ newPassword, forgotpasstoken }) => {
+  const url = `${backendUrl}/api/auth/newPassword/${forgotpasstoken}`;
+  const { data } = await axios.post(
+    url,
+    { newPassword },
+    { withCredentials: true }
+  );
+  return data;
+};

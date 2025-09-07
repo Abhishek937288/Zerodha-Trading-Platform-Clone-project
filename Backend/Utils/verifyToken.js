@@ -5,6 +5,6 @@ const token = crypto.randomBytes(3).toString("hex");
 return token;
 }
 
-export const expToken= ()=>{
+export const genTokenExp= ()=>{
    return new Date(Date.now() + 60 * 60 * 1000);
 }

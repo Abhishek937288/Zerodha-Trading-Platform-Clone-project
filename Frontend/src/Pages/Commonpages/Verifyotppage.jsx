@@ -3,6 +3,9 @@ import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { assets } from "@/assets/assets";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { verifyEmailFn } from "@/Mutation/authMutationFn";
+import toast from "react-hot-toast";
 
 const Verifyotppage = () => {
   const navigate = useNavigate();
@@ -18,13 +21,23 @@ const Verifyotppage = () => {
     }));
   };
 
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: verifyEmailFn,
+    onSuccess: (response) => {
+      toast.success(`${response.message}`);
+      navigate("/");
+      setFormData({ code: ""});
+    },
+    onError: (error) => {
+      console.log(error.response.data.message);
+      toast.error(`${error.response?.data?.message}`);
+    },
+  });
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      code: "",
-    });
-    navigate("/");
+   mutate(formData);
   };
   return (
     <div className="w-full bg-slate-300 min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">

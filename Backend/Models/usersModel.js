@@ -8,7 +8,8 @@ username:{
 },
 email :{
     type : String,
-    required : true
+    required : true,
+    unique:true
 },
 password : {
     type : String,
@@ -19,9 +20,9 @@ isVerified :{
     default:false
 },
 verificationToken : String,
-verificationTokenEpiresAt:Date,
+verificationTokenExpiresAt:Date,
 resetPasswordToken:String,
-resetPasswordTokenEpiresAt:Date
+resetPasswordTokenExpiresAt:Date
 });
 
 const userModel = mongoose.model("User", userShema);

@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 
 import Landingpagelayout from "./Layouts/Landingpagelayout";
 import Dashboardpagelayout from "./Layouts/Dashboardpagelayout";
@@ -26,7 +27,7 @@ import Orderspage from "./Pages/Dashboardpages/Orderspage";
 
 function App() {
   return (
-    <>
+  <div className="">
       <Routes>
         <Route element={<Landingpagelayout />}>
           <Route path="/" element={<Homepage />} />
@@ -41,7 +42,7 @@ function App() {
           <Route path="/Signinpage" element={<Signinpage />} />
           <Route path="/Verifyotppage" element={<Verifyotppage />} />
           <Route path="/Forgotpasspage" element={<Forgotpasspage />} />
-          <Route path="/Newpasswordpage" element={<Newpasswordpage />} />
+          <Route path="/Newpasswordpage/:forgotpasstoken" element={<Newpasswordpage />} />
         </Route>
 
         <Route element={<Dashboardpagelayout />}>
@@ -53,7 +54,8 @@ function App() {
           <Route path="/Positionspage" element={<Positionspage />} />
         </Route>
       </Routes>
-    </>
+      <Toaster position="top-right" />
+   </div>
   );
 }
 

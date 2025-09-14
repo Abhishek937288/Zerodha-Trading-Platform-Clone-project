@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 import Landingpagelayout from "./Layouts/Landingpagelayout";
 import Dashboardpagelayout from "./Layouts/Dashboardpagelayout";
@@ -23,11 +23,12 @@ import Dashboardpage from "./Pages/Dashboardpages/Dashboardpage";
 import Fundspage from "./Pages/Dashboardpages/Fundspage";
 import Holdingspage from "./Pages/Dashboardpages/Holdingspage";
 import Orderspage from "./Pages/Dashboardpages/Orderspage";
-
+import DashboardInnerLayout from "./Layouts/DashboardInnerLayout";
+import Watchlist from "./Components/Dashboardcompo/Common/Watchlist";
 
 function App() {
   return (
-  <div className="">
+    <div className="">
       <Routes>
         <Route element={<Landingpagelayout />}>
           <Route path="/" element={<Homepage />} />
@@ -42,20 +43,28 @@ function App() {
           <Route path="/Signinpage" element={<Signinpage />} />
           <Route path="/Verifyotppage" element={<Verifyotppage />} />
           <Route path="/Forgotpasspage" element={<Forgotpasspage />} />
-          <Route path="/Newpasswordpage/:forgotpasstoken" element={<Newpasswordpage />} />
+          <Route
+            path="/Newpasswordpage/:forgotpasstoken"
+            element={<Newpasswordpage />}
+          />
         </Route>
 
-        <Route element={<Dashboardpagelayout />}>
-          <Route path="/Appspage" element={<Appspage />} />
-          <Route path="/Dashboardpage" element={<Dashboardpage />} />
-          <Route path="/Fundspage" element={<Fundspage />} />
-          <Route path="/Holdingspage" element={<Holdingspage />} />
-          <Route path="/Orderspage" element={<Orderspage />} />
-          <Route path="/Positionspage" element={<Positionspage />} />
+        <Route path="/Dashboard" element={<Dashboardpagelayout />}>
+          <Route element={<DashboardInnerLayout />}>
+            <Route index element={<Dashboardpage />} />
+            <Route path="Watchlist" element={<Watchlist />} />
+            <Route path="Dashboardpage" element={<Dashboardpage />} />
+            <Route path="Appspage" element={<Appspage />} />
+            <Route path="Fundspage" element={<Fundspage />} />
+            <Route path="Holdingspage" element={<Holdingspage />} />
+            <Route path="Orderspage" element={<Orderspage />} />
+            <Route path="Positionspage" element={<Positionspage />} />
+          </Route>
         </Route>
+        
       </Routes>
       <Toaster position="top-right" />
-   </div>
+    </div>
   );
 }
 

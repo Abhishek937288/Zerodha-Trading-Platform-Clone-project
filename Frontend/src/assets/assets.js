@@ -47,7 +47,9 @@ import signupImg  from "./signupImg.png";
 import verifyOtp from "./verifyOtp.png";
 import forgotpass from "./forgotpass.png";
 import newPass from "./newPass.png";
+import abhi from "./Abhi.png";
 export const assets = {
+    abhi,
     newPass,
     forgotpass,
     verifyOtp,

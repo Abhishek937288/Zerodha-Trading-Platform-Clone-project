@@ -1,9 +1,10 @@
-import React from 'react'
+import Summary from "@/Components/Dashboardcompo/Dashboard/Summary";
+import React from "react";
 
 const Dashboardpage = () => {
-  return (
-    <div>Dashboardpage</div>
-  )
-}
+  return <>
+  <Summary/>
+  </>
+};
 
-export default Dashboardpage
+export default Dashboardpage;

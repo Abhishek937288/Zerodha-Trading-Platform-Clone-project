@@ -93,7 +93,7 @@ const Landingpagenav = () => {
               <div className="h-33 md:h-[50%]  grid md:grid-cols-4 grid-cols-2 ">
                 <div className="flex flex-row lg:flex-col items-center justify-center gap-2 cursor-pointer text-center" onClick={()=>{
                   setIsopen(false);
-                  navigate("/Dashboardpage");
+                  navigate("/Dashboard");
                 }}>
                   <img src={assets.kitelogo} className="w-10" alt="" />
                   <p className="opacity-80  ">kite</p>

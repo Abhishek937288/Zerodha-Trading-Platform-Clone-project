@@ -1,7 +1,7 @@
 import { assets } from "@/assets/assets";
 import React from "react";
 import { Popover } from "@radix-ui/themes";
-import { Button } from "@radix-ui/themes";
+
 
 const Team = () => {
   return (
@@ -218,6 +218,30 @@ const Team = () => {
             >
               <p className="text-center">
                 Austin is a successful self-made entrepreneur from Singapore. His area of specialty revolves around helping organisations including grow by optimizing revenue streams and creating growth strategies. He is a boxing enthusiast and loves collecting exquisite watches.
+              </p>
+            </Popover.Content>
+          </Popover.Root>
+        </div>
+         <div className="flex flex-col gap-2 items-center justify-center ">
+          <img src={assets.abhi} className="rounded-full w-57 h-57" alt="" />
+          <p>Abhishek Mankumbare</p>
+          <p>Web Developer</p>
+
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <button className="px-4 py-2 bg-white rounded border-none">
+                Bio <i className="fa-solid fa-angle-down opacity-80"></i>
+              </button>
+            </Popover.Trigger>
+
+            <Popover.Content
+              side="bottom"
+              align="center"
+              avoidCollisions={false}
+              className="bg-white p-4 shadow-md rounded h-60 w-80 max-sm:h-[50vh] max-sm:w-[85vw]"
+            >
+              <p className="text-center">
+               I’m a passionate MERN stack developer from India, exploring web projects and building innovative solutions. I enjoy learning new technologies, solving problems, and creating efficient applications that add value.
               </p>
             </Popover.Content>
           </Popover.Root>

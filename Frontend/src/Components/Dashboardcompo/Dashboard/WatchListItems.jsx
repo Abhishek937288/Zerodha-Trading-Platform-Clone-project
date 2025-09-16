@@ -7,7 +7,7 @@ const WatchListItems = ({ stock }) => {
     <Tooltip.Provider>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
-          <li className="hover:bg-slate-200 h-10 cursor-pointer border-b border-b-slate-100">
+          <li className=" hover:bg-slate-50 h-10 cursor-pointer border-b border-b-slate-100">
             <div className="flex justify-between items-center px-4">
               <p
                 className={` text-md max-sm:text-sm  text-center px-3 ${
@@ -34,7 +34,7 @@ const WatchListItems = ({ stock }) => {
           <Tooltip.Content
             side="top"
             sideOffset={3}
-            className="select-none rounded px-full sm:px-20 py-4 text-sm leading-none text-violet11 shadow-md absolute top-0 left-0 w-full h-full flex items-center justify-center will-change-transform  "
+            className="select-none rounded px-full lg:px-20 py-4 text-sm leading-none text-violet11 shadow-md absolute top-0 left-0 w-full h-full flex items-center justify-center will-change-transform  "
           >
             <div className="flex items-center gap-2">
               <button className="bg-blue-700 text-white text-xs rounded-lg px-3 py-1">
@@ -44,7 +44,7 @@ const WatchListItems = ({ stock }) => {
                 sell
               </button>
               <button className="bg-transparent text-black text-xs rounded-lg px-3 py-1">
-                <i class="fa-solid fa-chart-simple"></i>
+                <i className="fa-solid fa-chart-simple"></i>
               </button>
             </div>
           </Tooltip.Content>

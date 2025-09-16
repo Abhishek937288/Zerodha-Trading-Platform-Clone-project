@@ -5,7 +5,10 @@ import env from "envgaurd";
 import connectDb from "./Config/db.js";
 import cors from "cors";
 import authRoutes from "./Routes/authRoutes.js";
-import stocksRoute from "./Routes/stocksRoute.js";
+import fundRoutes from "./Routes/fundRoute.js";
+import orderRoutes from "./Routes/ordersRoute.js"
+import positionsRoutes from "./Routes/positionsRoute.js"
+import holdingsRoutes from "./Routes/holdingsRoute.js"
 
 const PORT = env("PORT", 5000);
 const FRONTEND_URL = env("FRONTEND_URL");
@@ -23,7 +26,10 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
-app.use("/api/stocks", stocksRoute);
+app.use("/api/funds", fundRoutes);
+app.use("/api/orders",orderRoutes);
+app.use("/api/positions",positionsRoutes);
+app.use("/api/holdings",holdingsRoutes);
 
 connectDb();
 

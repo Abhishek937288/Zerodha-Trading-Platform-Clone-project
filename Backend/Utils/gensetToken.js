@@ -7,7 +7,7 @@ const genandsetToken = (id, res) => {
   try {
     const token = jwt.sign({ id }, secretKey, { expiresIn: "15d" });
     res.cookie("token", token, {
-      httpsOnly: env("STATUS") !== dev,
+      httpsOnly: env("STATUS") !== "dev",
       sameSite: "Lax",
       secure: true,
       maxAge: 15 * 24 * 60 * 60 * 1000,

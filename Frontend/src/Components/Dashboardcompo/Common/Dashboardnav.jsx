@@ -2,7 +2,12 @@ import { assets } from "@/assets/assets";
 import { NavLink } from "react-router-dom";
 import React from "react";
 import { Popover } from "@radix-ui/themes";
-import { useMediaQuery } from "react-responsive";
+import { useQuery } from "@tanstack/react-query";
+import { getuserData, logOutFn } from "@/Mutation/authMutationFn.js";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { userAuthstore } from "@/Store/authStore.js";
 
 const navLinks = [
   { name: "Dashboard", link: "/Dashboard/Dashboardpage" },
@@ -14,6 +19,26 @@ const navLinks = [
 ];
 
 const Dashboardnav = () => {
+  const { setUser } = userAuthstore();
+  const navigate = useNavigate();
+  const {
+    data,
+    isPending: isUserLoading,
+    error: userError,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: getuserData,
+  });
+
+  let { mutate, isPending, error } = useMutation({
+    mutationFn: logOutFn,
+    onSuccess: () => {
+      navigate("/");
+      toast.success("Logout Successfull");
+      setUser(null);
+    },
+  });
+
   return (
     <div
       className="w-full 
@@ -101,7 +126,11 @@ const Dashboardnav = () => {
               </Popover.Root>
             </div>
             <div className="w-6 h-6 sm:w-8 sm:h-8 bg-pink-300 rounded-full flex items-center justify-center">
-              <p className="max-sm:text-sm">ZU</p>
+              {isUserLoading ? (
+                <p>..</p>
+              ) : (
+                <p>{data.username.slice(0, 2).toUpperCase()}</p>
+              )}
             </div>
             <div className="">
               <Popover.Root>
@@ -115,9 +144,21 @@ const Dashboardnav = () => {
                   side="bottom"
                   align="center"
                   avoidCollisions={false}
-                  className="bg-white mr-20 shadow-md rounded h-40 w-30 "
+                  className="bg-white mr-20 shadow-md rounded h-30 w-30 "
                 >
-                  <p className="text-center"></p>
+                  {" "}
+                  <div className="flex flex-col justify-center items-center gap-5">
+                    {isUserLoading ? <p>loading</p> : <p>{data.username}</p>}
+
+                    <button
+                      className="text-center px-2 py-1 border border-slate-500 rounded-lg bg-red-500 font-semibold text-sm text-white"
+                      onClick={() => {
+                        mutate();
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </Popover.Content>
               </Popover.Root>
             </div>

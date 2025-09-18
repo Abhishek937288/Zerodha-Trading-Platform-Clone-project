@@ -25,8 +25,30 @@ import Holdingspage from "./Pages/Dashboardpages/Holdingspage";
 import Orderspage from "./Pages/Dashboardpages/Orderspage";
 import DashboardInnerLayout from "./Layouts/DashboardInnerLayout";
 import Watchlist from "./Components/Dashboardcompo/Common/Watchlist";
+import { getuserData } from "./Mutation/authMutationFn.js";
+import { useQuery } from "@tanstack/react-query";
+import { userAuthstore } from "./Store/authStore";
+import { useEffect } from "react";
+import { PublicLayout } from "./Layouts/PublicLayout";
 
 function App() {
+  const { setUser } = userAuthstore();
+
+  const {
+    data,
+    isPending: isUserLoading,
+    error: userError,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: getuserData,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setUser(data);
+    }
+  }, [data]);
+
   return (
     <div className="">
       <Routes>
@@ -39,14 +61,16 @@ function App() {
         </Route>
 
         <Route element={<Commonpagelayout />}>
-          <Route path="/Signuppage" element={<Signuppage />} />
-          <Route path="/Signinpage" element={<Signinpage />} />
-          <Route path="/Verifyotppage" element={<Verifyotppage />} />
-          <Route path="/Forgotpasspage" element={<Forgotpasspage />} />
-          <Route
-            path="/Newpasswordpage/:forgotpasstoken"
-            element={<Newpasswordpage />}
-          />
+          <Route element={<PublicLayout/>}>
+            <Route path="/Signuppage" element={<Signuppage />} />
+            <Route path="/Signinpage" element={<Signinpage />} />
+            <Route path="/Verifyotppage" element={<Verifyotppage />} />
+            <Route path="/Forgotpasspage" element={<Forgotpasspage />} />
+            <Route
+              path="/Newpasswordpage/:forgotpasstoken"
+              element={<Newpasswordpage />}
+            />
+          </Route>
         </Route>
 
         <Route path="/Dashboard" element={<Dashboardpagelayout />}>
@@ -61,7 +85,6 @@ function App() {
             <Route path="Positionspage" element={<Positionspage />} />
           </Route>
         </Route>
-        
       </Routes>
       <Toaster position="top-right" />
     </div>

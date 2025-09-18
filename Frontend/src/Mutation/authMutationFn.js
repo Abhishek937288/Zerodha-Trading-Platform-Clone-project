@@ -36,3 +36,17 @@ export const newPasswordFn = async ({ newPassword, forgotpasstoken }) => {
   );
   return data;
 };
+
+export const getuserData = async () => {
+  const url = `${backendUrl}/api/auth/check-auth`;
+  const { data } = await axios.get(url, { withCredentials: true });
+  
+  return data.data;
+};
+
+
+export const logOutFn = async () => {
+  const url = `${backendUrl}/api/auth/log-out`;
+  const { data } = await axios.post(url, {},{ withCredentials: true,});
+  return data.data;
+};

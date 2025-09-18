@@ -61,6 +61,7 @@ export const buy = async (req, res) => {
         net: "0",
         day: "0",
         userId: req.userId,
+        prevClose: price,
       });
     } else {
       const totalQty = holding.qty + qty;
@@ -71,12 +72,12 @@ export const buy = async (req, res) => {
       const net = (((holding.price - holding.avg) / holding.avg) * 100).toFixed(
         2
       );
-      const day = (
-        ((holding.price - holding.prevClose) / holding.prevClose) *
-        100
-      ).toFixed(2);
+      const day =
+        holding.prevClose && holding.prevClose > 0
+          ? ((holding.price - holding.prevClose) / holding.prevClose) * 100
+          : 0;
 
-      holding.day = (day >= 0 ? "+" : "") + day + "%";
+      holding.day = (day >= 0 ? "+" : "") + day.toFixed(2) + "%";
       holding.net = (net >= 0 ? "+" : "") + net + "%";
       holding.isLoss = holding.price < holding.avg;
     }
@@ -98,6 +99,7 @@ export const buy = async (req, res) => {
         day: "0",
         isLoss: false,
         userId: req.userId,
+        prevClose: price,
       });
     } else {
       const totalQty = position.qty + qty;
@@ -109,13 +111,14 @@ export const buy = async (req, res) => {
         ((position.price - position.avg) / position.avg) *
         100
       ).toFixed(2);
-      const day = (
-        ((position.price - position.prevClose) / position.prevClose) *
-        100
-      ).toFixed(2);
+      const day =
+        position.prevClose && position.prevClose > 0
+          ? ((position.price - position.prevClose) / position.prevClose) * 100
+          : 0;
 
       position.net = (net >= 0 ? "+" : "") + net + "%";
-      position.day = (day >= 0 ? "+" : "") + day + "%";
+
+      position.day = (day >= 0 ? "+" : "") + day.toFixed(2) + "%";
       position.isLoss = position.price < position.avg;
     }
     await position.save();
@@ -242,12 +245,12 @@ export const sell = async (req, res) => {
       });
     }
     if (fund.investedAmount < price * qty) {
-  return res.status(400).json({
-    data: null,
-    success: false,
-    message: "Insufficient invested amount",
-  });
-}
+      return res.status(400).json({
+        data: null,
+        success: false,
+        message: "Insufficient invested amount",
+      });
+    }
 
     fund.totalAmount += price * qty;
     fund.investedAmount -= price * qty;

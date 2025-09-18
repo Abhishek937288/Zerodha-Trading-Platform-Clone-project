@@ -1,5 +1,5 @@
 import React, { use } from "react";
-import { useState } from "react";
+
 import { Tooltip } from "radix-ui";
 
 const WatchListItems = ({ stock }) => {

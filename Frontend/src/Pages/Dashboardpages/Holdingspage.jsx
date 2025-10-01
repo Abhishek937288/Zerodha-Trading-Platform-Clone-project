@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import { getHoldings } from "@/Mutation/stockMutationFn.js";
+import HoldingsCharts from "@/Components/Dashboardcompo/Dashboard/HoldingsCharts";
 
 const Holdingspage = () => {
   const { data, error, isPending } = useQuery({
@@ -14,6 +15,8 @@ const Holdingspage = () => {
   if (error) {
     return <p> error is {error.message} </p>;
   }
+
+  console.log(data);
   return (
     <div className="">
       <h3>Holdings ({data.length})</h3>
@@ -38,26 +41,35 @@ const Holdingspage = () => {
               const avg = stock.avg ?? 0;
               const qty = stock.qty ?? 0;
               const currVal = price * qty;
+
               const isProfit = currVal - avg * qty >= 0;
               const profitClass = isProfit ? "text-green-600" : "text-red-600";
               const dayClass = stock.isLoss ? "text-red-600" : "text-green-600";
+
               return (
                 <Table.Row key={idx}>
-                  <Table.RowHeaderCell>{stock.name}</Table.RowHeaderCell>
-                  <Table.Cell>{stock.qty}</Table.Cell>
-                  <Table.Cell>{stock.avg.toFixed(2)}</Table.Cell>
-                  <Table.Cell>{stock.price.toFixed(2)}</Table.Cell>
+                  <Table.RowHeaderCell>
+                    {stock.name ?? "N/A"}
+                  </Table.RowHeaderCell>
+                  <Table.Cell>{qty}</Table.Cell>
+                  <Table.Cell>{avg.toFixed(2)}</Table.Cell>
+                  <Table.Cell>{price.toFixed(2)}</Table.Cell>
                   <Table.Cell>{currVal.toFixed(2)}</Table.Cell>
                   <Table.Cell className={profitClass}>
-                    {(currVal - stock.avg * stock.qty).toFixed(2)}
+                    {(currVal - avg * qty).toFixed(2)}
                   </Table.Cell>
-                  <Table.Cell className={profitClass}>{stock.net}</Table.Cell>
-                  <Table.Cell className={dayClass}>{stock.day}</Table.Cell>
+                  <Table.Cell className={profitClass}>
+                    {stock.net ?? 0}
+                  </Table.Cell>
+                  <Table.Cell className={dayClass}>{stock.day ?? 0}</Table.Cell>
                 </Table.Row>
               );
             })}
           </Table.Body>
         </Table.Root>
+      </div>
+      <div className="mt-5">
+      <HoldingsCharts holdings={data}/>
       </div>
     </div>
   );

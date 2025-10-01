@@ -5,6 +5,7 @@ import WatchListItems from "../Dashboard/WatchListItems";
 import { useState, useEffect } from "react";
 
 import { io } from "socket.io-client";
+import WatchListCharts from "../Dashboard/WatchListCharts";
 const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
 
 const Watchlist = () => {
@@ -49,13 +50,12 @@ const Watchlist = () => {
           <div className="flex flex-col mt-3 gap-3">
             {stocksData.map((stock, index) => {
               return (
-                <div className="" key={index}>
                   <WatchListItems stock={stock} key={index} />
-                </div>
               );
             })}
           </div>
         </ul>
+        <WatchListCharts watchlist={stocksData}/>
       </div>
     </div>
   );

@@ -2,8 +2,9 @@ import React from "react";
 import { Table } from "@radix-ui/themes";
 import { positions } from "@/data/data";
 import { useQuery } from "@tanstack/react-query";
-import { use } from "react";
+
 import { getPositions } from "@/Mutation/stockMutationFn.js";
+import PositionsCharts from "@/Components/Dashboardcompo/Dashboard/PositionsCharts";
 
 const Positionspage = () => {
   const { data, isPending, error } = useQuery({
@@ -46,19 +47,22 @@ const Positionspage = () => {
                 <Table.Row key={idx}>
                   <Table.RowHeaderCell>{stock.product}</Table.RowHeaderCell>
                   <Table.Cell>{stock.name}</Table.Cell>
-                  <Table.Cell>{stock.qty.toFixed(2)}</Table.Cell>
-                  <Table.Cell>{stock.avg.toFixed(2)}</Table.Cell>
-                  <Table.Cell>{stock.price.toFixed(2)}</Table.Cell>
+                  <Table.Cell>{(stock.qty ?? 0).toFixed(2)}</Table.Cell>
+                  <Table.Cell>{(stock.avg ?? 0).toFixed(2)}</Table.Cell>
+                  <Table.Cell>{(stock.price ?? 0).toFixed(2)}</Table.Cell>
                   <Table.Cell className={dayClass}>{stock.day}</Table.Cell>
 
                   <Table.Cell className={profitClass}>
-                    {(currVal - stock.avg * stock.qty).toFixed(2)}
+                    {(currVal - (stock.avg ?? 0) * (stock.qty ?? 0)).toFixed(2)}
                   </Table.Cell>
                 </Table.Row>
               );
             })}
           </Table.Body>
         </Table.Root>
+      </div>
+      <div className="mt-5">
+        <PositionsCharts positions={data} />
       </div>
     </div>
   );

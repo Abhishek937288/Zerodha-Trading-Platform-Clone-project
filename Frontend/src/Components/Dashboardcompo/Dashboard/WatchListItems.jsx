@@ -1,56 +1,80 @@
-import React, { use } from "react";
-
-import { Tooltip } from "radix-ui";
+import React, { useState } from "react";
+import { HoverCard } from "radix-ui";
+import BuyAction from "./BuyAction";
+import SellAction from "./SellAction";
+import WatchListCharts from "./WatchListCharts";
+import StockChart from "./StockChart";
 
 const WatchListItems = ({ stock }) => {
+  const [open, setOpen] = useState(false);
+  const [buyOpen, setBuyOpen] = useState(false);
+  const [sellOpen, setSellOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [chartOpen , setChartOpen]= useState(false);
+
   return (
-    <Tooltip.Provider>
-      <Tooltip.Root>
-        <Tooltip.Trigger asChild>
-          <li className=" hover:bg-slate-50 h-10 cursor-pointer border-b border-b-slate-100">
-            <div className="flex justify-between items-center px-4">
-              <p
-                className={` text-md max-sm:text-sm  text-center px-3 ${
-                  stock.isDown ? "text-red-500" : "text-green-400"
-                }`}
-              >
-                {stock.name}
-              </p>
-              <div className="flex gap-2  items-center">
-                <span className="text-xs flex items-center gap-2 text-center ">
-                  {stock.percent}
-                  {stock.isDown ? (
-                    <i className="fa-solid text-red-500  text-xs fa-angle-down"></i>
-                  ) : (
-                    <i className="fa-solid  text-green-400 text-xs fa-angle-up"></i>
-                  )}
-                </span>
-                <span className="text-xs text-center">{stock.price}</span>
-              </div>
+    <HoverCard.Root
+      open={open}
+      onOpenChange={(state) => {
+        if (state) {
+          setOpen(true);
+        } else if (!state && !popoverOpen) {
+          setOpen(false);
+        }
+      }}
+    >
+      <HoverCard.Trigger asChild>
+        <li className=" hover:bg-slate-50 h-10 cursor-pointer border-b border-b-slate-100">
+          <div className="flex justify-between items-center px-4">
+            <p
+              className={` text-md max-sm:text-sm  text-center px-3 ${
+                stock.isDown ? "text-red-500" : "text-green-400"
+              }`}
+            >
+              {stock.name}
+            </p>
+            <div className="flex gap-2  items-center">
+              <span className="text-xs flex items-center gap-2 text-center ">
+                {stock.percent}
+                {stock.isDown ? (
+                  <i className="fa-solid text-red-500  text-xs fa-angle-down"></i>
+                ) : (
+                  <i className="fa-solid  text-green-400 text-xs fa-angle-up"></i>
+                )}
+              </span>
+              <span className="text-xs text-center">{stock.price}</span>
             </div>
-          </li>
-        </Tooltip.Trigger>
-        <Tooltip.Portal>
-          <Tooltip.Content
-            side="top"
-            sideOffset={3}
-            className="select-none rounded px-full lg:px-20 py-4 text-sm leading-none text-violet11 shadow-md absolute top-0 left-0 w-full h-full flex items-center justify-center will-change-transform  "
-          >
-            <div className="flex items-center gap-2">
-              <button className="bg-blue-700 text-white text-xs rounded-lg px-3 py-1">
-                buy
-              </button>
-              <button className="bg-green-700 text-white text-xs rounded-lg px-3 py-1">
-                sell
-              </button>
-              <button className="bg-transparent text-black text-xs rounded-lg px-3 py-1">
-                <i className="fa-solid fa-chart-simple"></i>
-              </button>
-            </div>
-          </Tooltip.Content>
-        </Tooltip.Portal>
-      </Tooltip.Root>
-    </Tooltip.Provider>
+          </div>
+        </li>
+      </HoverCard.Trigger>
+
+      <HoverCard.Content
+        side="top"
+        sideOffset={3}
+        className="select-none rounded px-full lg:px-20 py-4 text-sm leading-none text-violet11 shadow-md absolute top-0 left-0 w-full h-full flex items-center justify-center will-change-transform  "
+      >
+        <div className="flex items-center gap-2">
+          <BuyAction
+            popoverOpen={buyOpen}
+            setPopoverOpen={setBuyOpen}
+            stock={stock}
+            setOpen={setOpen}
+          />
+
+          <SellAction
+            popoverOpen={sellOpen}
+            setPopoverOpen={setSellOpen}
+            stock={stock}
+            setOpen={setOpen}
+          />
+
+          <StockChart  popoverOpen={chartOpen}
+            setPopoverOpen={setChartOpen}
+            stock={stock}
+            setOpen={setOpen}/>
+        </div>
+      </HoverCard.Content>
+    </HoverCard.Root>
   );
 };
 

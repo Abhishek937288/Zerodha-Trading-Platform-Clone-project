@@ -7,6 +7,7 @@ const Orderspages = () => {
   const { data, isPending, error } = useQuery({
     queryKey: ["stocks"],
     queryFn: getOrders,
+    staleTime: 0,
   });
 
   if (isPending) {
@@ -15,6 +16,8 @@ const Orderspages = () => {
   if (error) {
     return <p>error : {error.message}</p>;
   }
+
+  console.log(data);
   return (
     <div className="">
       <h3>Orders ({data.length})</h3>
@@ -37,7 +40,7 @@ const Orderspages = () => {
                   <Table.RowHeaderCell>{stock.name}</Table.RowHeaderCell>
                   <Table.Cell>{stock.qty}</Table.Cell>
 
-                  <Table.Cell>{stock.price.toFixed(2)}</Table.Cell>
+                  <Table.Cell>{(stock.price ?? 0).toFixed(2)}</Table.Cell>
                   <Table.Cell>{stock.mode}</Table.Cell>
                   <Table.Cell>
                     {new Date(stock.createdAt).toLocaleString()}

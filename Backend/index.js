@@ -9,10 +9,12 @@ import fundRoutes from "./Routes/fundRoute.js";
 import orderRoutes from "./Routes/ordersRoute.js";
 import positionsRoutes from "./Routes/positionsRoute.js";
 import holdingsRoutes from "./Routes/holdingsRoute.js";
+import dashboardRoutes from  "./Routes/dashboardRoutes.js";
 import http from "http";
 import { Server } from "socket.io";
 import { stockData } from "./Utils/stocksData.js";
 import { updateStockPrice } from "./Utils/stocksData.js";
+
 
 const PORT = env("PORT", 5000);
 const FRONTEND_URL = env("FRONTEND_URL");
@@ -55,6 +57,7 @@ app.use("/api/funds", fundRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/positions", positionsRoutes);
 app.use("/api/holdings", holdingsRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 connectDb();
 

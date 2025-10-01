@@ -51,14 +51,13 @@ export const sendForgotpassLink = async (email, forntendUrl) => {
   }
 };
 
-
 export const updatePassword = async (email, name) => {
   try {
     const response = await resend.emails.send({
       from: "onboarding@resend.dev",
       to: email,
       subject: "Your token for the email verification",
-      html: `<p>${name} your reset password request successfully done</p>`
+      html: `<p>${name} your reset password request successfully done</p>`,
     });
     return response;
   } catch (err) {

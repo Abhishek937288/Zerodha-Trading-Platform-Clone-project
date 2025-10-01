@@ -30,6 +30,7 @@ import { useQuery } from "@tanstack/react-query";
 import { userAuthstore } from "./Store/authStore";
 import { useEffect } from "react";
 import { PublicLayout } from "./Layouts/PublicLayout";
+import Loading from "./Components/Commoncompo/Common/Loading";
 
 function App() {
   const { setUser } = userAuthstore();
@@ -42,12 +43,16 @@ function App() {
     queryKey: ["user"],
     queryFn: getuserData,
   });
-
+  
   useEffect(() => {
     if (data) {
       setUser(data);
     }
   }, [data]);
+
+  if(isUserLoading){
+    return <Loading/>
+  }
 
   return (
     <div className="">

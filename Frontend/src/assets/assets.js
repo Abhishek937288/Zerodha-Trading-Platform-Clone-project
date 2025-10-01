@@ -1,4 +1,3 @@
-import react from "./react.png";
 import appstoreBadge from "./appstoreBadge.svg";
 import coin from "./coin.png";
 import coins from "./coin.svg";
@@ -37,65 +36,69 @@ import hasan from "./Hasan.svg.jpg";
 import seema from "./Seema.svg.jpg";
 import Kailash from "./Kailash.svg.jpg";
 import Venu from "./Venu.svg.jpg";
-import Nikhil  from "./Nikhil.svg.jpg";
+import Nikhil from "./Nikhil.svg.jpg";
 import Karthik from "./Karthik.jpg";
 import Austin from "./Austin.svg.jpg";
 import Productkite from "./products-kite.png";
 import tijori from "./tijori.svg";
 import loginImg from "./loginImg.png";
-import signupImg  from "./signupImg.png";
+import signupImg from "./signupImg.png";
 import verifyOtp from "./verifyOtp.png";
 import forgotpass from "./forgotpass.png";
 import newPass from "./newPass.png";
 import abhi from "./Abhi.png";
+import commingSoon from "./commingSoon.jpg";
+
+
 export const assets = {
-    abhi,
-    newPass,
-    forgotpass,
-    verifyOtp,
-    signupImg,
-    loginImg,
-    tijori,
-    Productkite,
-    hasan,
-    seema,
-    Kailash,
-    Karthik,
-    Venu,
-    Nikhil,
-    Austin,
-    appstoreBadge,
-    kiteconnectSvg,
-    kiteconnectPng,
-    coin,
-    coins,
-    console,
-    consoles,
-    dittoLogo,
-    ecosystem,
-    education,
-    EmptyPortfolioImage,
-    goldenpiLogo,
-    googlePlayBadge,
-    homeHero,
-    intradayTrades,
-    kitelogocopy,
-    kitelogo,
-    kite,
-    largestBrokerage,
-    logo,
-    nithinkamath,
-    orderscopy,
-    orders,
-    pressLogos,
-    pricingO,
-    pricingEquity,
-    pricingMF,
-    sensibullLogo,
-    signup,
-    smallcaseLogo,
-    streakLogo,
-    varsity,
-    varsitys,
-    zerodhaFundhouse
+  commingSoon,
+  abhi,
+  newPass,
+  forgotpass,
+  verifyOtp,
+  signupImg,
+  loginImg,
+  tijori,
+  Productkite,
+  hasan,
+  seema,
+  Kailash,
+  Karthik,
+  Venu,
+  Nikhil,
+  Austin,
+  appstoreBadge,
+  kiteconnectSvg,
+  kiteconnectPng,
+  coin,
+  coins,
+  console,
+  consoles,
+  dittoLogo,
+  ecosystem,
+  education,
+  EmptyPortfolioImage,
+  goldenpiLogo,
+  googlePlayBadge,
+  homeHero,
+  intradayTrades,
+  kitelogocopy,
+  kitelogo,
+  kite,
+  largestBrokerage,
+  logo,
+  nithinkamath,
+  orderscopy,
+  orders,
+  pressLogos,
+  pricingO,
+  pricingEquity,
+  pricingMF,
+  sensibullLogo,
+  signup,
+  smallcaseLogo,
+  streakLogo,
+  varsity,
+  varsitys,
+  zerodhaFundhouse,
 };

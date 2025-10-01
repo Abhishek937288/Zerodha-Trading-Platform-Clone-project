@@ -27,7 +27,7 @@ export const buy = async (req, res) => {
       return res.status(400).json({
         data: null,
         success: false,
-        message: "Invalid input",
+        message: "please enter qty",
       });
     }
 
@@ -151,6 +151,9 @@ export const sell = async (req, res) => {
     }
 
     // for the holdings
+
+    let soldCompelety = false;
+
     let holding = await holdingModel.findOne({ userId: req.userId, name });
     if (!holding) {
       return res.status(400).json({
@@ -187,11 +190,12 @@ export const sell = async (req, res) => {
         await holding.save();
       } else {
         await holdingModel.deleteOne({ name, userId: req.userId });
-        return res.json({
-          message: "Stock sold and removed from holdings.",
-          success: true,
-          data: null,
-        });
+        // return res.json({
+        //   message: "Stock sold and removed from holdings.",
+        //   success: true,
+        //   data: null,
+        // });
+        soldCompelety = true;
       }
     }
 
@@ -228,11 +232,11 @@ export const sell = async (req, res) => {
       await position.save();
     } else {
       await positionModel.deleteOne({ name, userId: req.userId });
-      return res.json({
-        message: "Stock sold and removed from postions.",
-        success: true,
-        data: null,
-      });
+      // return res.json({
+      //   message: "Stock sold and removed from postions.",
+      //   success: true,
+      //   data: null,
+      // });
     }
 
     // for the funds
@@ -242,13 +246,6 @@ export const sell = async (req, res) => {
         data: null,
         success: false,
         message: "Fund not found",
-      });
-    }
-    if (fund.investedAmount < price * qty) {
-      return res.status(400).json({
-        data: null,
-        success: false,
-        message: "Insufficient invested amount",
       });
     }
 
@@ -268,7 +265,7 @@ export const sell = async (req, res) => {
     return res.status(200).json({
       data: newOrder,
       success: true,
-      message: "order Placed successfully",
+      message: soldCompelety ? "stock sold completely" : " order placed",
     });
   } catch (err) {
     console.log(err);

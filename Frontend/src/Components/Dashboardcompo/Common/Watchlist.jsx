@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 
 import { io } from "socket.io-client";
 import WatchListCharts from "../Dashboard/WatchListCharts";
-import { Spinner } from "@radix-ui/themes";
+
 import Loading from "@/Components/Commoncompo/Common/Loading";
 const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
 
@@ -22,7 +22,7 @@ const Watchlist = () => {
 
     socket.on("stocksData", (data) => {
       setStocksData(data);
-        setisLoading(false);
+      setisLoading(false);
     });
 
     socket.on("disconnect", () => {
@@ -33,8 +33,6 @@ const Watchlist = () => {
       socket.off("connect");
       socket.off("stocksData");
       socket.off("disconnect");
-
-    
     };
   }, []);
   console.log(isLoading);

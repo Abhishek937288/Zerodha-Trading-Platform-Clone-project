@@ -1,14 +1,19 @@
 import React from "react";
 import { watchlist } from "@/data/data";
 import Topbar from "../Dashboard/Topbar";
+
 import WatchListItems from "../Dashboard/WatchListItems";
+
 import { useState, useEffect } from "react";
 
 import { io } from "socket.io-client";
 import WatchListCharts from "../Dashboard/WatchListCharts";
+import { Spinner } from "@radix-ui/themes";
+import Loading from "@/Components/Commoncompo/Common/Loading";
 const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
 
 const Watchlist = () => {
+  const [isLoading, setisLoading] = useState(true);
   const [stocksData, setStocksData] = useState([]);
   useEffect(() => {
     socket.on("connect", () => {
@@ -17,6 +22,7 @@ const Watchlist = () => {
 
     socket.on("stocksData", (data) => {
       setStocksData(data);
+        setisLoading(false);
     });
 
     socket.on("disconnect", () => {
@@ -27,8 +33,14 @@ const Watchlist = () => {
       socket.off("connect");
       socket.off("stocksData");
       socket.off("disconnect");
+
+    
     };
   }, []);
+  console.log(isLoading);
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container h-[100vh]  sticky left-0  ">
@@ -49,13 +61,11 @@ const Watchlist = () => {
         <ul>
           <div className="flex flex-col mt-3 gap-3">
             {stocksData.map((stock, index) => {
-              return (
-                  <WatchListItems stock={stock} key={index} />
-              );
+              return <WatchListItems stock={stock} key={index} />;
             })}
           </div>
         </ul>
-        <WatchListCharts watchlist={stocksData}/>
+        <WatchListCharts watchlist={stocksData} />
       </div>
     </div>
   );

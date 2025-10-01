@@ -40,9 +40,11 @@ export const signup = async (req, res) => {
   const verifyokenEpiresAt = genTokenExp();
   user.verificationToken = verifyToken;
   user.verificationTokenExpiresAt = verifyokenEpiresAt;
-  await sendVerificationEmail(email, verifyToken);
-
   await user.save();
+ const response = await sendVerificationEmail(email, verifyToken);
+ console.log("Resend response:", response);
+
+  
 
   const { password: _, ...userWithoutpassword } = user._doc;
 
@@ -180,13 +182,11 @@ export const newPassword = async (req, res) => {
     resetPasswordTokenExpiresAt: { $gt: Date.now() },
   });
   if (!user) {
-    return res
-      .status(400)
-      .json({
-        data: null,
-        success: false,
-        message: "invlaid request or token expired",
-      });
+    return res.status(400).json({
+      data: null,
+      success: false,
+      message: "invlaid request or token expired",
+    });
   }
   if (!user.isVerified) {
     return res
@@ -203,13 +203,11 @@ export const newPassword = async (req, res) => {
   await user.save();
   updatePassword(user.email, user.username);
 
-  return res
-    .status(200)
-    .json({
-      data: null,
-      success: true,
-      message: "password updated succesfull",
-    });
+  return res.status(200).json({
+    data: null,
+    success: true,
+    message: "password updated succesfull",
+  });
 };
 
 export const checkAuth = async (req, res) => {
@@ -221,17 +219,22 @@ export const checkAuth = async (req, res) => {
         .json({ data: null, success: false, message: "user not found" });
     }
     const { password: _, ...userWithoutPassword } = user._doc;
-    return res
-      .status(201)
-      .json({
-        data: userWithoutPassword,
-        success: true,
-        message: "user found succesfully",
-      });
+    return res.status(201).json({
+      data: userWithoutPassword,
+      success: true,
+      message: "user found succesfully",
+    });
   } catch (err) {
     console.log(err.message);
     return res
       .status(401)
       .json({ data: null, success: false, message: err.message });
   }
+};
+
+export const logOut = (req, res) => {
+  res.clearCookie("token", { httpOnly: true, maxAge: 0 });
+  return res
+    .status(200)
+    .json({ data: null, success: true, message: "user Logout successfully" });
 };

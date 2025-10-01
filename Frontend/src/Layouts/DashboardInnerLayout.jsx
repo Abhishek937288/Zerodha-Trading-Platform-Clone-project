@@ -8,6 +8,7 @@ import { Navigate } from "react-router-dom";
 const DashboardInnerLayout = () => {
   const isLargeScreen = useMediaQuery({ query: "(min-width: 640px)" });
   const location = useLocation();
+  
 
   // If on Watchlist and screen is large, redirect to index
   if (isLargeScreen && location.pathname === "/Dashboard/Watchlist") {

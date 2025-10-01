@@ -1,10 +1,47 @@
 import React from "react";
 import { watchlist } from "@/data/data";
 import Topbar from "../Dashboard/Topbar";
+
 import WatchListItems from "../Dashboard/WatchListItems";
-import { Tooltip } from "radix-ui";
+
+import { useState, useEffect } from "react";
+
+import { io } from "socket.io-client";
+import WatchListCharts from "../Dashboard/WatchListCharts";
+import { Spinner } from "@radix-ui/themes";
+import Loading from "@/Components/Commoncompo/Common/Loading";
+const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
 
 const Watchlist = () => {
+  const [isLoading, setisLoading] = useState(true);
+  const [stocksData, setStocksData] = useState([]);
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected with ID:", socket.id);
+    });
+
+    socket.on("stocksData", (data) => {
+      setStocksData(data);
+        setisLoading(false);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("stocksData");
+      socket.off("disconnect");
+
+    
+    };
+  }, []);
+  console.log(isLoading);
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="container h-[100vh]  sticky left-0  ">
       <Topbar />
@@ -18,20 +55,17 @@ const Watchlist = () => {
             className=" text-center text-xs sm:text-sm h-10 w-full opacity-80"
           />
           <span className="text-center text-xs sm:text-sm opacity-80">
-            {watchlist.length}/50
+            {stocksData.length}/50
           </span>
         </div>
         <ul>
           <div className="flex flex-col mt-3 gap-3">
-            {watchlist.map((stock, index) => {
-              return (
-                <div className="" key={index}>
-                  <WatchListItems stock={stock} key={index} />
-                </div>
-              );
+            {stocksData.map((stock, index) => {
+              return <WatchListItems stock={stock} key={index} />;
             })}
           </div>
         </ul>
+        <WatchListCharts watchlist={stocksData} />
       </div>
     </div>
   );

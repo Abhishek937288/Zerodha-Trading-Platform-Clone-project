@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getDashboard } from "@/Mutation/stockMutationFn.js";
+import { Skeleton } from "@radix-ui/themes";
 
 const Summary = () => {
   const { data, isPending, error } = useQuery({
@@ -9,13 +10,42 @@ const Summary = () => {
     staleTime: 0,
   });
   if (isPending) {
-    return <p>Loading</p>;
+    return (
+      <div className="container h-[80vh] grid grid-rows-5 px-5 sm:px-5">
+        <div className="row-span-1 border-b border-b-slate-400 flex items-baseline-last">
+          <Skeleton width="100px" height="20px" />
+        </div>
+
+        <div className="row-span-2 w-full border-b border-b-slate-400 flex items-baseline-last max-sm:text-center max-sm:gap-10">
+          <div className="pb-5 w-25 flex flex-col gap-10">
+            <Skeleton width="60px" height="20px" />
+            <Skeleton width="120px" height="28px" />
+            <Skeleton width="100px" height="18px" />
+          </div>
+          <div className="flex flex-col w-full items-center justify-center max-sm:mr-25 gap-2">
+            <Skeleton width="80px" height="16px" />
+            <Skeleton width="140px" height="16px" />
+          </div>
+        </div>
+
+        <div className="row-span-2 flex items-baseline-last max-sm:gap-5">
+          <div className="flex pb-5 flex-col gap-10">
+            <Skeleton width="100px" height="20px" />
+            <Skeleton width="80px" height="28px" />
+          </div>
+          <div className="max-sm:flex flex-col w-full items-center justify-center max-sm:mr-25 gap-2">
+            <Skeleton width="120px" height="16px" />
+            <Skeleton width="100px" height="16px" />
+          </div>
+        </div>
+      </div>
+    );
   }
   if (error) {
     return <p>error : {error.message}</p>;
   }
 
-  const holdings = data.holdings.length
+  const holdings = data.holdings.length;
   console.log(data);
   return (
     <div className=" container h-[80vh] grid grid-rows-5 px-5 sm:px-5">
@@ -27,7 +57,9 @@ const Summary = () => {
         <div className="pb-5 w-25 flex flex-col gap-10">
           <p className="sm:text-lg      opacity-80">Equity</p>
           <div className="">
-            <p className="sm:text-2xl text-lg opacity-80">{data.marginAvailable}</p>
+            <p className="sm:text-2xl text-lg opacity-80">
+              {data.marginAvailable}
+            </p>
             <p className="sm:text-sm  text-xs opacity-80">Margin Available</p>
           </div>
         </div>

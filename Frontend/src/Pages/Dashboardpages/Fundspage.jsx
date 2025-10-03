@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { addFunds, getFunds } from "@/Mutation/fundsMutation.js";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { Spinner } from "@radix-ui/themes";
+import { Skeleton } from "@radix-ui/themes";
 
 const Fundspage = () => {
   const queryClient = useQueryClient();
@@ -43,10 +43,21 @@ const Fundspage = () => {
   });
 
   if (isPending) {
-    return <div className="">
-      <Spinner />
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 mt-10 grid-cols-1 gap-10">
+          <div className="rounded-2xl sm:w-[20vw] w-[80vw] border p-4 shadow-sm">
+            <Skeleton width="120px" height="16px" />
+            <Skeleton width="100px" height="28px" className="mt-3" />
+          </div>
 
-    </div>;
+          <div className="rounded-2xl sm:w-[20vw] w-[80vw] border p-4 shadow-sm">
+            <Skeleton width="140px" height="16px" />
+            <Skeleton width="100px" height="28px" className="mt-3" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {

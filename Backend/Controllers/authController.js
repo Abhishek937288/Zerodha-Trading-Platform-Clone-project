@@ -41,10 +41,8 @@ export const signup = async (req, res) => {
   user.verificationToken = verifyToken;
   user.verificationTokenExpiresAt = verifyokenEpiresAt;
   await user.save();
- const response = await sendVerificationEmail(email, verifyToken);
- console.log("Resend response:", response);
-
-  
+  const response = await sendVerificationEmail(email, verifyToken);
+  console.log("Resend response:", response);
 
   const { password: _, ...userWithoutpassword } = user._doc;
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "@radix-ui/themes";
 import { positions } from "@/data/data";
 import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@radix-ui/themes";
 
 import { getPositions } from "@/Mutation/stockMutationFn.js";
 import PositionsCharts from "@/Components/Dashboardcompo/Dashboard/PositionsCharts";
@@ -13,7 +14,40 @@ const Positionspage = () => {
   });
 
   if (isPending) {
-    return <p> Loading ..</p>;
+    return (
+      <div className="container mt-5 md:px-10">
+        <h3>
+          Position <Skeleton width="40px" height="20px" />
+        </h3>
+        <div className="flex justify-center w-full">
+          <Table.Root className="w-full px-5 sm:px-10 md:px-15">
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>Product</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Qty</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Price</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Net</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Day</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>isLoss</Table.ColumnHeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <Table.Row key={idx}>
+                  {Array.from({ length: 7 }).map((_, colIdx) => (
+                    <Table.Cell key={colIdx}>
+                      <Skeleton width="80px" height="16px" />
+                    </Table.Cell>
+                  ))}
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </div>
+      </div>
+    );
   }
 
   if (error) {

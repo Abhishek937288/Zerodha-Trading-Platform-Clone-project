@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import { getOrders } from "@/Mutation/stockMutationFn.js";
+import { Skeleton } from "@radix-ui/themes";
 
 const Orderspages = () => {
   const { data, isPending, error } = useQuery({
@@ -11,7 +12,38 @@ const Orderspages = () => {
   });
 
   if (isPending) {
-    return <p>Loading .. </p>;
+    return (
+      <div>
+        <h3>
+          Orders <Skeleton width="40px" height="20px" />
+        </h3>
+        <div className="flex justify-center w-full">
+          <Table.Root className="w-full px-5 sm:px-10 md:px-15">
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Quantity</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Price</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Mode</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Time</Table.ColumnHeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <Table.Row key={idx}>
+                  {Array.from({ length: 5 }).map((_, colIdx) => (
+                    <Table.Cell key={colIdx}>
+                      <Skeleton width="80px" height="16px" />
+                    </Table.Cell>
+                  ))}
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </div>
+      </div>
+    );
   }
   if (error) {
     return <p>error : {error.message}</p>;

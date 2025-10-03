@@ -3,6 +3,7 @@ import { Table } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import { getHoldings } from "@/Mutation/stockMutationFn.js";
 import HoldingsCharts from "@/Components/Dashboardcompo/Dashboard/HoldingsCharts";
+import { Skeleton } from "@radix-ui/themes";
 
 const Holdingspage = () => {
   const { data, error, isPending } = useQuery({
@@ -10,7 +11,45 @@ const Holdingspage = () => {
     queryFn: getHoldings,
   });
   if (isPending) {
-    return <p>data loading ..</p>;
+    return (
+      <div>
+        <h3>
+          Holdings <Skeleton width="40px" height="20px" />
+        </h3>
+        <div className="flex justify-center w-full">
+          <Table.Root className="w-full px-5 sm:px-10 md:px-15">
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>Instrument</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Qty</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Avg.cost</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Ltp</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Cur.val</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>P&l</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Net chg</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Day chg.</Table.ColumnHeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <Table.Row key={idx}>
+                  {Array.from({ length: 8 }).map((_, colIdx) => (
+                    <Table.Cell key={colIdx}>
+                      <Skeleton width="80px" height="16px" />
+                    </Table.Cell>
+                  ))}
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </div>
+
+        <div className="mt-5">
+          <Skeleton width="100%" height="300px" /> 
+        </div>
+      </div>
+    );
   }
   if (error) {
     return <p> error is {error.message} </p>;
@@ -69,7 +108,7 @@ const Holdingspage = () => {
         </Table.Root>
       </div>
       <div className="mt-5">
-      <HoldingsCharts holdings={data}/>
+        <HoldingsCharts holdings={data} />
       </div>
     </div>
   );

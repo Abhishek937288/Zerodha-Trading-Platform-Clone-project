@@ -6,8 +6,10 @@ import { useState } from "react";
 import { signinFn } from "@/Mutation/authMutationFn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { userAuthstore } from "../../Store/authStore";
 
 const Signinpage = () => {
+  const { setUser } = userAuthstore();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,8 +29,8 @@ const Signinpage = () => {
     mutationFn: signinFn,
     onSuccess: (response) => {
       toast.success(`${response.message}`);
+      setUser(response.data);
       navigate("/");
-      setFormData({ email: "", password: "" });
     },
     onError: (error) => {
       console.log(error.response.data.message);

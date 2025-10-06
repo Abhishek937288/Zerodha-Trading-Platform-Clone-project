@@ -6,8 +6,10 @@ import { assets } from "@/assets/assets";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { verifyEmailFn } from "@/Mutation/authMutationFn";
 import toast from "react-hot-toast";
+import { userAuthstore } from "../../Store/authStore";
 
 const Verifyotppage = () => {
+  const { setUser } = userAuthstore();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,8 +27,8 @@ const Verifyotppage = () => {
     mutationFn: verifyEmailFn,
     onSuccess: (response) => {
       toast.success(`${response.message}`);
+      setUser(response.data);
       navigate("/");
-      setFormData({ code: ""});
     },
     onError: (error) => {
       console.log(error.response.data.message);
@@ -34,10 +36,9 @@ const Verifyotppage = () => {
     },
   });
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-   mutate(formData);
+    mutate(formData);
   };
   return (
     <div className="w-full bg-slate-300 min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
@@ -50,27 +51,25 @@ const Verifyotppage = () => {
           />
         </div>
         <div className="flex flex-col justify-center gap-10 items-center w-full">
-          
-
           <div className="flex flex-col items-center gap-5">
             <p className="text-start">
-            <i className="fa-solid fa-arrow-left"></i> {"  "}
-            Back to{" "}
-            <a
-              href=""
-              className="text-red-700  text-sm opacity-90"
-              onClick={() => {
-                navigate("/Signuppage");
-              }}
-            >
-              Signup
-            </a>
-          </p>
+              <i className="fa-solid fa-arrow-left"></i> {"  "}
+              Back to{" "}
+              <a
+                href=""
+                className="text-red-700  text-sm opacity-90"
+                onClick={() => {
+                  navigate("/Signuppage");
+                }}
+              >
+                Signup
+              </a>
+            </p>
             <h4 className="text-2xl font-semibold">Verify Code</h4>
             <p className="text-md opacity-90">
               An authentication code has been sent to your mail.
             </p>
-          </div> 
+          </div>
           <form className="">
             <div>
               <div className="relative">

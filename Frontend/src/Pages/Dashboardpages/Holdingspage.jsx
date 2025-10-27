@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getHoldings } from "@/Mutation/stockMutationFn.js";
 import HoldingsCharts from "@/Components/Dashboardcompo/Dashboard/HoldingsCharts";
 import { Skeleton } from "@radix-ui/themes";
-const a = er ;
 
 const Holdingspage = () => {
   const { data, error, isPending } = useQuery({

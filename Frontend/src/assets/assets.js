@@ -37,7 +37,7 @@ import seema from "./Seema.svg.jpg";
 import Kailash from "./Kailash.svg.jpg";
 import Venu from "./Venu.svg.jpg";
 import Nikhil from "./Nikhil.svg.jpg";
-import Karthik from "./Karthik.jpg";
+import Karthik from "./karthik.jpg";
 import Austin from "./Austin.svg.jpg";
 import Productkite from "./products-kite.png";
 import tijori from "./tijori.svg";

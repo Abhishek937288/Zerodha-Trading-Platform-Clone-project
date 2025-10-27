@@ -1,5 +1,8 @@
 import axios from "axios";
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const backendUrl =
+  import.meta.env.MODE === "development"
+    ? import.meta.env.VITE_BACKEND_URL
+    : "/api";
 
 export const getHoldings = async () => {
   const res = await axios.get(`${backendUrl}/api/holdings`, {
@@ -34,11 +37,10 @@ export const sellStock = async (stockData) => {
   return data;
 };
 
-
-export const getDashboard = async ()=>{
+export const getDashboard = async () => {
   const url = `${backendUrl}/api/dashboard`;
   const res = await axios.get(url, {
     withCredentials: true,
   });
   return res.data.data;
-}
+};

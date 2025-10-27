@@ -26,7 +26,14 @@ const __dirname = path.resolve();
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.NODE_ENV === "production" ? "*" : FRONTEND_URL,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   },
 });
@@ -34,13 +41,25 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigins = process.env.FRONTEND_URL.split(",");
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://zerodha-trading-platform-clone-proj-ashy.vercel.app",
+];
 
 app.use(
   cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 

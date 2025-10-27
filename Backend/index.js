@@ -34,10 +34,12 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cookieParser());
 
+const allowedOrigins = process.env.FRONTEND_URL.split(",");
+
 app.use(
   cors({
-    origin: [FRONTEND_URL],
-    method: ["GET", "POST", "PUT", "DELETE"],
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );

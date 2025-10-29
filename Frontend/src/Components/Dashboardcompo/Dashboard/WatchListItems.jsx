@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { HoverCard } from "radix-ui";
 import BuyAction from "./BuyAction";
 import SellAction from "./SellAction";
-import WatchListCharts from "./WatchListCharts";
-import StockChart from "./StockChart";
 
+import StockChart from "./StockChart";
+import { DropdownMenu } from "@radix-ui/themes";
+
+import WatchListCharts from "./WatchListCharts";
 const WatchListItems = ({ stock }) => {
   const [open, setOpen] = useState(false);
   const [buyOpen, setBuyOpen] = useState(false);
   const [sellOpen, setSellOpen] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const [chartOpen , setChartOpen]= useState(false);
+  const [chartOpen, setChartOpen] = useState(false);
 
   return (
     <HoverCard.Root
@@ -33,6 +35,39 @@ const WatchListItems = ({ stock }) => {
             >
               {stock.name}
             </p>
+
+            <div className="sm:hidden"><DropdownMenu.Root>
+              <DropdownMenu.Trigger>
+                <button>...</button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Content>
+                <DropdownMenu.Item
+                  onClick={() => {
+                    setBuyOpen(true);
+                  }}
+                >
+                  Buy
+                </DropdownMenu.Item>
+
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item
+                  onClick={() => {
+                    setSellOpen(true);
+                  }}
+                >
+                  sell
+                </DropdownMenu.Item>
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item
+                  onClick={() => {
+                    setChartOpen(true);
+                  }}
+                >
+                  stockChart
+                </DropdownMenu.Item>
+              </DropdownMenu.Content>
+            </DropdownMenu.Root></div>
+
             <div className="flex gap-2  items-center">
               <span className="text-xs flex items-center gap-2 text-center ">
                 {stock.percent}
@@ -68,10 +103,12 @@ const WatchListItems = ({ stock }) => {
             setOpen={setOpen}
           />
 
-          <StockChart  popoverOpen={chartOpen}
+          <StockChart
+            popoverOpen={chartOpen}
             setPopoverOpen={setChartOpen}
             stock={stock}
-            setOpen={setOpen}/>
+            setOpen={setOpen}
+          />
         </div>
       </HoverCard.Content>
     </HoverCard.Root>

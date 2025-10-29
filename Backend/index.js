@@ -26,13 +26,11 @@ const __dirname = path.resolve();
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.NODE_ENV === 'production'
-      ? false
-      : FRONTEND_URL,
-    methods: ['GET', 'POST'],
+    origin: process.env.NODE_ENV === "production" ? false : FRONTEND_URL,
+    methods: ["GET", "POST"],
     credentials: true,
   },
-})
+});
 
 app.use(express.json());
 app.use(cookieParser());
@@ -67,9 +65,6 @@ app.use("/api/holdings", holdingsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
 connectDb();
-
-
-
 
 if (process.env.NODE_ENV === "production") {
   const frontendPath = path.join(__dirname, "client");

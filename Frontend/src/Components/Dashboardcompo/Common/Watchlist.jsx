@@ -10,7 +10,11 @@ import { io } from "socket.io-client";
 import WatchListCharts from "../Dashboard/WatchListCharts";
 
 import Loading from "@/Components/Commoncompo/Common/Loading";
-const socket = io(`${import.meta.env.VITE_BACKEND_URL}`);
+const socket = io(
+  import.meta.env.MODE === "production"
+    ? window.location.origin // same server
+    : import.meta.env.VITE_BACKEND_URL
+);
 
 const Watchlist = () => {
   const [isLoading, setisLoading] = useState(true);

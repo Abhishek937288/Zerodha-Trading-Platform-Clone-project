@@ -24,23 +24,22 @@ const server = http.createServer(app);
 
 const __dirname = path.resolve();
 
-const allowedOrigins = process.env.FRONTEND_URL.split(",");
-
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: process.env.NODE_ENV === 'production'
+      ? false
+      : FRONTEND_URL,
+    methods: ['GET', 'POST'],
     credentials: true,
   },
-});
+})
 
 app.use(express.json());
 app.use(cookieParser());
 
-
-
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -69,12 +68,14 @@ app.use("/api/dashboard", dashboardRoutes);
 
 connectDb();
 
-if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "../Frontend/dist"); // matches your folder
-  app.use(express.static(frontendPath));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../Frontend/dist/index.html"));
+
+
+if (process.env.NODE_ENV === "production") {
+  const frontendPath = path.join(__dirname, "client");
+  app.use(express.static(frontendPath));
+  app.get("/*splat", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
   });
 }
 

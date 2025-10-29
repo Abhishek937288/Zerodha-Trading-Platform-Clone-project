@@ -2,7 +2,7 @@ import axios from "axios";
 const backendUrl =
   import.meta.env.MODE === "development"
     ? import.meta.env.VITE_BACKEND_URL
-    : "/api";
+    : "";
 
 export const signupFn = async (formdata) => {
   const url = `${backendUrl}/api/auth/signup`;

@@ -88,6 +88,9 @@ const BuyAction = ({ stock, setOpen, popoverOpen, setPopoverOpen }) => {
               size="1"
               onClick={() => {
                 mutation.mutate(stockData);
+                if(isMobile){
+                  setPopoverOpen(false);
+                }
               }}
             >
               Submit

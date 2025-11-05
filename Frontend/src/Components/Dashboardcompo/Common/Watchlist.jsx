@@ -19,13 +19,35 @@ const socket = io(
 const Watchlist = () => {
   const [isLoading, setisLoading] = useState(true);
   const [stocksData, setStocksData] = useState([]);
+
+  const closeAllForm = () => {
+    setStocksData((prevData) =>
+      prevData.map((stock) => ({ ...stock, isOpen: false }))
+    );
+  };
+
+  // take id and id and map check if index matches id then toggle isOpen
+
+  const toggleForm = (id, state = true) => {
+    if (id == undefined) return;
+    closeAllForm();
+    setStocksData((stocks) => {
+      return stocks.map((stock, i) => {
+        if (i == id) {
+          return { ...stock, isOpen: state };
+        }
+        return stock;
+      });
+    });
+  };
+
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Connected with ID:", socket.id);
     });
 
     socket.on("stocksData", (data) => {
-      setStocksData(data);
+      setStocksData(data.map((s) => ({ ...s, isOpen: false }))); // isBuyOpen , isSellOpen
       setisLoading(false);
     });
 
@@ -39,7 +61,7 @@ const Watchlist = () => {
       socket.off("disconnect");
     };
   }, []);
-  console.log(isLoading);
+
   if (isLoading) {
     return <Loading />;
   }
@@ -63,7 +85,14 @@ const Watchlist = () => {
         <ul>
           <div className="flex flex-col mt-3 gap-3">
             {stocksData.map((stock, index) => {
-              return <WatchListItems stock={stock} key={index} />;
+              return (
+                <WatchListItems
+                  stock={stock}
+                  toggleForm={toggleForm}
+                  key={index}
+                  id={index}
+                />
+              );
             })}
           </div>
         </ul>

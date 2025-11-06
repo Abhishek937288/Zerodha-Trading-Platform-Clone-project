@@ -12,6 +12,9 @@ const transporter = nodemailer.createTransport({
     user: nodemailerEmail,
     pass: nodemailerPassword, // must be Google App Password
   },
+   tls: {
+    rejectUnauthorized: false, // prevents some certificate issues
+  },
 });
 
 export const sendMail = async (to, sub, mess) => {

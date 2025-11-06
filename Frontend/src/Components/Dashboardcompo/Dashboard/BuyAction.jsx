@@ -48,6 +48,8 @@ const BuyAction = ({ stock, setOpen, popoverOpen, setPopoverOpen }) => {
     },
   });
 
+  const {isPeding }= mutation ;
+
   return (
     <Popover.Root
       open={popoverOpen}
@@ -88,10 +90,11 @@ const BuyAction = ({ stock, setOpen, popoverOpen, setPopoverOpen }) => {
               size="1"
               onClick={() => {
                 mutation.mutate(stockData);
-                if(isMobile){
-                  setPopoverOpen(false);
-                }
+                // if(isMobile){
+                //   setPopoverOpen(false);
+                // }
               }}
+              disabled={isPeding}
             >
               Submit
             </Button>

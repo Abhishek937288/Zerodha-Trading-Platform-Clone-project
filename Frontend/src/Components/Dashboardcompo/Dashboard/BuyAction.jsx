@@ -48,7 +48,7 @@ const BuyAction = ({ stock, setOpen, popoverOpen, setPopoverOpen }) => {
     },
   });
 
-  const {isPeding }= mutation ;
+  const { isPeding } = mutation;
 
   return (
     <Popover.Root
@@ -64,7 +64,6 @@ const BuyAction = ({ stock, setOpen, popoverOpen, setPopoverOpen }) => {
     >
       <Popover.Trigger>
         <div>
-          
           <button className="max-sm:hidden bg-blue-700 cursor-pointer text-white text-xs rounded-lg px-3 py-1 hidden md:block ">
             buy
           </button>
@@ -90,7 +89,7 @@ const BuyAction = ({ stock, setOpen, popoverOpen, setPopoverOpen }) => {
               size="1"
               onClick={() => {
                 mutation.mutate(stockData);
-                if(isMobile){
+                if (isMobile) {
                   setPopoverOpen(false);
                 }
               }}

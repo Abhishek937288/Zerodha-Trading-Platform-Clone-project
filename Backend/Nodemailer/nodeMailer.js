@@ -10,11 +10,10 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: nodemailerEmail,
-    pass: nodemailerPassword, // must be Google App Password
+    pass: nodemailerPassword,
   },
-   tls: {
-    rejectUnauthorized: false, // prevents some certificate issues
-  },
+  logger: true,
+  debug: true,
 });
 
 export const sendMail = async (to, sub, mess) => {

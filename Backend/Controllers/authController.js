@@ -23,9 +23,33 @@ export const signup = async (req, res) => {
   const { email, password, username } = value;
   const existingUser = await userModel.findOne({ email });
   if (existingUser) {
-    return res
-      .status(400)
-      .json({ data: null, success: false, message: "email already taken" });
+    if (existingUser.isVerified) {
+      return res.status(400).json({
+        data: null,
+        success: false,
+        message:
+          "Signup request received. If this email is not verified, a new token has been sent",
+      });
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const verifyToken = verificationToken();
+      const verifyokenEpiresAt = genTokenExp();
+      existingUser.username = username;
+      existingUser.password = hashedPassword;
+      existingUser.verificationToken = verifyToken;
+      existingUser.verificationTokenExpiresAt = verifyokenEpiresAt;
+      await existingUser.save();
+      const response = await sendVerificationEmail(email, verifyToken);
+
+      const { password: _, ...existingUserWithoutpassword } = existingUser._doc;
+
+      return res.status(200).json({
+        data: existingUserWithoutpassword,
+        success: true,
+        message: "token sent succesfully",
+      });
+    }
   }
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -42,7 +66,6 @@ export const signup = async (req, res) => {
   user.verificationTokenExpiresAt = verifyokenEpiresAt;
   await user.save();
   const response = await sendVerificationEmail(email, verifyToken);
-  console.log("Resend response:", response);
 
   const { password: _, ...userWithoutpassword } = user._doc;
 

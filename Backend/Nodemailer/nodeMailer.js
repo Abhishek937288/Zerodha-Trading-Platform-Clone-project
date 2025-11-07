@@ -19,15 +19,14 @@ import nodemailer from "nodemailer";
 const isProduction = process.env.NODE_ENV === "production";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: isProduction ? 465 : 587, // 465 for production (SSL), 587 for dev
-  secure: isProduction, // true in production, false in development
+  service: "gmail",
   auth: {
     user: nodemailerEmail,
-    pass: nodemailerPassword,
+    pass: nodemailerPassword, // must be Google App Password
   },
+
   logger: true, // logs SMTP conversation
-  debug: true,  // prints debugging info in console
+  debug: true, // prints debugging info in console
 });
 
 export const sendMail = async (to, sub, mess) => {
@@ -37,5 +36,3 @@ export const sendMail = async (to, sub, mess) => {
     html: mess,
   });
 };
-
-

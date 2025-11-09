@@ -66,13 +66,13 @@ app.use("/api/dashboard", dashboardRoutes);
 
 connectDb();
 
-if (process.env.NODE_ENV === "production") {
+ // if (process.env.NODE_ENV === "production") {
   const frontendPath = path.join(__dirname, "client");
   app.use(express.static(frontendPath));
   app.get("/*splat", (req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));
   });
-}
+// }
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

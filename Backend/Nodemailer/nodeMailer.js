@@ -6,28 +6,17 @@ const nodemailerPassword = env("PASSWORD");
 
 import nodemailer from "nodemailer";
 
-// const transporter = nodemailer.createTransport({
-//   service: "gmail",
-//   auth: {
-//     user: nodemailerEmail,
-//     pass: nodemailerPassword,
-//   },
-//   logger: true,
-//   debug: true,
-// });
-
-const isProduction = process.env.NODE_ENV === "production";
-
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: nodemailerEmail,
-    pass: nodemailerPassword, // must be Google App Password
+    pass: nodemailerPassword,
   },
-
-  logger: true, // logs SMTP conversation
-  debug: true, // prints debugging info in console
+  logger: true,
+  debug: true,
 });
+
+
 
 export const sendMail = async (to, sub, mess) => {
   return await transporter.sendMail({

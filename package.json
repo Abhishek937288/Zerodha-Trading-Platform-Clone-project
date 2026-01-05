@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-and-start": "npm install --prefix Frontend && npm run build --prefix Frontend && npm install --prefix Backend && npm start --prefix Backend"
+    "build-and-start": "pnpm --dir Frontend install && pnpm --dir Frontend run build && pnpm --dir Backend install && pnpm --dir Backend start"
   },
   "repository": {
     "type": "git",

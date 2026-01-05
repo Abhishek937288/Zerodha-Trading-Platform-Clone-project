@@ -7,7 +7,7 @@ import {
   sendwelcomeEmail,
   sendForgotpassLink,
   updatePassword,
-} from "../Nodemailer/email.js";
+} from "../Sendgrid/email.js";
 import { verificationToken, genTokenExp } from "../Utils/verifyToken.js";
 import genandsetToken from "../Utils/gensetToken.js";
 import env from "envgaurd";

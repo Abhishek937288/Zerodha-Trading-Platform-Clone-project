@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { HoverCard } from "radix-ui";
+import * as HoverCard from "@radix-ui/react-hover-card";
 import { DropdownMenu } from "@radix-ui/themes";
 import useIsMobile from "@/hooks/useMobile";
 import BuyAction from "./BuyAction";
 import SellAction from "./SellAction";
 import StockChart from "./StockChart";
+
 
 const WatchListItems = ({ stock }) => {
   const isMobile = useIsMobile();

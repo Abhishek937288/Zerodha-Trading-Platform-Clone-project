@@ -12,6 +12,7 @@ import dashboardRoutes from "./Routes/dashboardRoutes.js";
 import http from "http";
 import { Server } from "socket.io";
 import { stockData, updateStockPrice } from "./Utils/stocksData.js";
+
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -29,20 +30,16 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS only for dev
-if (process.env.NODE_ENV !== "production") {
-  app.use(
-    cors({
-      origin: FRONTEND_URL,
-      credentials: true,
-    })
-  );
-}
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  })
+);
 
-// Socket.IO
 const io = new Server(server, {
   cors:
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === "development"
       ? {}
       : { origin: FRONTEND_URL, credentials: true },
 });
@@ -71,15 +68,13 @@ app.use("/api/dashboard", dashboardRoutes);
 // DB
 connectDb();
 
-// Serve frontend
 if (process.env.NODE_ENV === "production") {
   const frontendPath = path.join(__dirname, "client");
   app.use(express.static(frontendPath));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
-});
-
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
 }
 
 server.listen(PORT, () => {

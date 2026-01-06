@@ -2,7 +2,7 @@ import React from "react";
 import { assets } from "@/assets/assets";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { forgotPassFn } from "@/Mutation/authMutationFn";
 import toast from "react-hot-toast";
 
@@ -20,7 +20,7 @@ const Forgotpasspage = () => {
     }));
   };
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: forgotPassFn,
     onSuccess: (response) => {
       toast.success(`${response.message}`);
@@ -96,7 +96,7 @@ const Forgotpasspage = () => {
           <img
             src={assets.forgotpass}
             alt="signup"
-            className="max-h-[300px] md:max-h-full object-contain"
+            className="max-h-75 md:max-h-full object-contain"
           />
         </div>
       </div>

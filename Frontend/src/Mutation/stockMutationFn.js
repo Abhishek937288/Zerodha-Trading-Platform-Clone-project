@@ -43,5 +43,6 @@ export const getDashboard = async () => {
   const res = await axios.get(url, {
     withCredentials: true,
   });
+  
   return res.data.data;
 };

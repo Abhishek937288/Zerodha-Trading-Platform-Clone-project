@@ -4,7 +4,7 @@ import { assets } from "@/assets/assets";
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { signinFn } from "@/Mutation/authMutationFn";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { userAuthstore } from "../../Store/authStore";
 
@@ -25,7 +25,7 @@ const Signinpage = () => {
     }));
   };
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: signinFn,
     onSuccess: (response) => {
       toast.success(`${response.message}`);
@@ -33,9 +33,15 @@ const Signinpage = () => {
       navigate("/");
     },
     onError: (error) => {
-      console.log(error.response.data.message);
-      toast.error(`${error.response?.data?.message}`);
-    },
+  const message =
+    error?.response?.data?.message ||
+    error?.message ||
+    "Something went wrong";
+
+  console.log(message);
+  toast.error(message);
+},
+
   });
 
   const handleSubmit = (e) => {
@@ -122,7 +128,7 @@ const Signinpage = () => {
           <img
             src={assets.loginImg}
             alt="signup"
-            className="max-h-[300px] md:max-h-full object-contain"
+            className="max-h-75 md:max-h-full object-contain"
           />
         </div>
       </div>

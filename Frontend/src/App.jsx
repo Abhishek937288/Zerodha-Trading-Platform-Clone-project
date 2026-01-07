@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import  { Toaster } from "react-hot-toast";
 
 import Landingpagelayout from "./Layouts/Landingpagelayout";
 import Dashboardpagelayout from "./Layouts/Dashboardpagelayout";

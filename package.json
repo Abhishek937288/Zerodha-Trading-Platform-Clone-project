@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build-and-start": "pnpm --dir Frontend install && pnpm --dir Frontend run build && pnpm --dir Backend install && pnpm --dir Backend start"
+    "build": "cd Frontend && pnpm install && pnpm run build",
+    "start": "cd Backend && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

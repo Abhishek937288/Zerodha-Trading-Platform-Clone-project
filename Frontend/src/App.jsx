@@ -25,33 +25,20 @@ import Holdingspage from "./Pages/Dashboardpages/Holdingspage";
 import Orderspage from "./Pages/Dashboardpages/Orderspage";
 import DashboardInnerLayout from "./Layouts/DashboardInnerLayout";
 import Watchlist from "./Components/Dashboardcompo/Common/Watchlist";
-import { getuserData } from "./Mutation/authMutationFn.js";
-import { useQuery } from "@tanstack/react-query";
 import { userAuthstore } from "./Store/authStore";
 import { useEffect } from "react";
 import { PublicLayout } from "./Layouts/PublicLayout";
 import Loading from "./Components/Commoncompo/Common/Loading";
 
 function App() {
-  const { setUser } = userAuthstore();
+  const { checkAuth, isAuthLoading } = userAuthstore();
 
-  const {
-    data,
-    isPending: isUserLoading,
-    error: userError,
-  } = useQuery({
-    queryKey: ["user"],
-    queryFn: getuserData,
-  });
-  
   useEffect(() => {
-    if (data) {
-      setUser(data);
-    }
-  }, [data]);
+    checkAuth();
+  }, []);
 
-  if(isUserLoading){
-    return <Loading/>
+  if (isAuthLoading) {
+    return <Loading />;
   }
 
   return (

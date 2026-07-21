@@ -1,18 +1,25 @@
-
 import { sendMail } from "./sendGridEmail.js";
-import { verificationEmailTemplate ,WELCOME_EMAIL_TEMPLATE } from "./template.js";
+import {
+  verificationEmailTemplate,
+  WELCOME_EMAIL_TEMPLATE,
+  FORGOT_PASSWORD_TEMPLATE,
+  PASSWORD_UPDATED_TEMPLATE,
+} from "./template.js";
+import env from "envgaurd";
+
+const frontendUrl = env("FRONTEND_URL");
 
 export const sendVerificationEmail = async (email, verificationToken) => {
   try {
-    // const html = verificationEmailTemplate.replace(
-    //   "{verificationToken}",
-    //   verificationToken
-    // );
+    const html = verificationEmailTemplate.replace(
+      "{verificationToken}",
+      verificationToken
+    );
 
     const response = await sendMail(
       email,
-      "Your token for the email verification",
-      verificationToken
+      "Verify your email address - Stock.in",
+      html
     );
 
     return response;
@@ -24,11 +31,15 @@ export const sendVerificationEmail = async (email, verificationToken) => {
 
 export const sendwelcomeEmail = async (email, name) => {
   try {
-    // const html = WELCOME_EMAIL_TEMPLATE.replace("{name}", name);
+    const html = WELCOME_EMAIL_TEMPLATE.replace("{name}", name).replace(
+      "{dashboardUrl}",
+      `${frontendUrl}/Dashboard/Dashboardpage`
+    );
+
     const response = await sendMail(
       email,
-      "Your token for the email verification",
-      name
+      "Welcome to Stock.in - Email Verified 🎉",
+      html
     );
     return response;
   } catch (err) {
@@ -37,29 +48,38 @@ export const sendwelcomeEmail = async (email, name) => {
   }
 };
 
-export const sendForgotpassLink = async (email, forntendUrl) => {
+export const sendForgotpassLink = async (email, resetUrl) => {
   try {
-    // const html = `<p>Click <a href="${forntendUrl}">here</a> to reset your password </p>`;
-    const response = await sendMail(email, "please check the link", forntendUrl);
+    const html = FORGOT_PASSWORD_TEMPLATE.replace("{resetUrl}", resetUrl);
+
+    const response = await sendMail(
+      email,
+      "Reset your password - Stock.in",
+      html
+    );
 
     return response;
   } catch (err) {
     console.log(err.message);
+    throw new Error("Error while sending forgot password mail");
   }
 };
 
 export const updatePassword = async (email, name) => {
   try {
-    // const response = await resend.emails.send({
-    //   from: "onboarding@resend.dev",
-    //   to: email,
-    //   subject: "Your token for the email verification",
-    //   html: `<p>${name} your reset password request successfully done</p>`,
-    // const html = `<p>${name} your reset password request successfully done</p>`;
-    const subject = "Your token for the email verification";
-    const response = await sendMail(email, subject, name);
+    const html = PASSWORD_UPDATED_TEMPLATE.replace("{name}", name).replace(
+      "{dashboardUrl}",
+      `${frontendUrl}/Dashboard/Dashboardpage`
+    );
+
+    const response = await sendMail(
+      email,
+      "Password updated successfully - Stock.in",
+      html
+    );
     return response;
   } catch (err) {
     console.log(err.message);
+    throw new Error("Error while sending password update mail");
   }
 };

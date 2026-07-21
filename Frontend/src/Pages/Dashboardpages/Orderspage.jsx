@@ -3,6 +3,7 @@ import { Table } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import { getOrders } from "@/Mutation/stockMutationFn.js";
 import { Skeleton } from "@radix-ui/themes";
+import EmptyState from "@/Components/Dashboardcompo/Common/EmptyState";
 
 const Orderspages = () => {
   const { data, isPending, error } = useQuery({
@@ -49,7 +50,17 @@ const Orderspages = () => {
     return <p>error : {error.message}</p>;
   }
 
-  console.log(data);
+  if (!data || data.length === 0) {
+    return (
+      <EmptyState
+        title="No orders yet"
+        description="Your orders will appear here once you start trading. Head to the dashboard to buy or sell your first stock."
+        actionLabel="Go to Dashboard"
+        actionLink="/Dashboard/Dashboardpage"
+      />
+    );
+  }
+
   return (
     <div className="">
       <h3>Orders ({data.length})</h3>

@@ -4,24 +4,21 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export const userAuthstore = create((set) => ({
   user: null,
+  isAuthLoading: true,
+
   setUser: (user) => {
     return set({ user });
   },
 
-  // hey u connect or not
-
-  // fetchFn: async () => {
-  //   set({ isLoading: true, error: null });
-  //   try {
-  //     const res = await axios.get(
-  //       `${backendUrl}/api/auth/check-auth`,
-  //       {
-  //         withCredentials: true,
-  //       },
-  //       set({ isLoading: false, user: res.data })
-  //     );
-  //   } catch (err) {
-  //     set({ error: err });
-  //   }
-  // },
+  checkAuth: async () => {
+    try {
+      const res = await axios.get(
+        `${backendUrl}/api/auth/check-auth`,
+        { withCredentials: true }
+      );
+      set({ user: res.data.data, isAuthLoading: false });
+    } catch (err) {
+      set({ user: null, isAuthLoading: false });
+    }
+  },
 }));

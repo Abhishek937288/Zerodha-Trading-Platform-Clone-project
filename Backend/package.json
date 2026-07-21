@@ -11,7 +11,6 @@
   "author": "Abhi",
   "license": "ISC",
   "dependencies": {
-    "@sendgrid/mail": "^8.1.6",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

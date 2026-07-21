@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getHoldings } from "@/Mutation/stockMutationFn.js";
 import HoldingsCharts from "@/Components/Dashboardcompo/Dashboard/HoldingsCharts";
 import { Skeleton } from "@radix-ui/themes";
+import EmptyState from "@/Components/Dashboardcompo/Common/EmptyState";
 
 const Holdingspage = () => {
   const { data, error, isPending } = useQuery({
@@ -55,9 +56,15 @@ const Holdingspage = () => {
     return <p> error is {error.message} </p>;
   }
 
-  console.log(data);
-  if(data.length == 0){
-    return <p>NO data</p>
+  if (!data || data.length === 0) {
+    return (
+      <EmptyState
+        title="No holdings yet"
+        description="Start building your portfolio! Your holdings will appear here once you buy your first stock from the dashboard."
+        actionLabel="Start Trading"
+        actionLink="/Dashboard/Dashboardpage"
+      />
+    );
   }
   return (
     <div className="">

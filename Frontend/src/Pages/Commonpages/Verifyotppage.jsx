@@ -27,6 +27,7 @@ const Verifyotppage = () => {
     mutationFn: verifyEmailFn,
     onSuccess: (response) => {
       toast.success(`${response.message}`);
+      userAuthstore.getState().setToken(response.data.token);
       setUser(response.data);
       navigate("/");
     },

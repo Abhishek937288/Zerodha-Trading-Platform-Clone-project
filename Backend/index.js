@@ -26,7 +26,6 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: FRONTEND_URL,
-    credentials: true,
   }),
 );
 
@@ -34,7 +33,7 @@ const io = new Server(server, {
   cors:
     process.env.NODE_ENV === "development"
       ? {}
-      : { origin: FRONTEND_URL, credentials: true },
+      : { origin: FRONTEND_URL },
 });
 
 io.on("connection", (socket) => {

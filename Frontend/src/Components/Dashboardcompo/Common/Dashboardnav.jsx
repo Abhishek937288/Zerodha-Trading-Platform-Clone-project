@@ -26,6 +26,7 @@ const Dashboardnav = () => {
   const { mutate } = useMutation({
     mutationFn: logOutFn,
     onSuccess: () => {
+      userAuthstore.getState().removeToken();
       setUser(null);
       navigate("/");
       toast.success("Logged out successfully");

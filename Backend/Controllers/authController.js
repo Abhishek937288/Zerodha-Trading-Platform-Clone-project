@@ -9,7 +9,7 @@ import {
   updatePassword,
 } from "../Sendgrid/email.js";
 import { verificationToken, genTokenExp } from "../Utils/verifyToken.js";
-import genandsetToken from "../Utils/gensetToken.js";
+import genToken from "../Utils/gensetToken.js";
 import env from "envgaurd";
 const frontendUrl = env("FRONTEND_URL");
 
@@ -101,14 +101,14 @@ export const verifyemail = async (req, res) => {
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
     await user.save();
-    genandsetToken(user._id, res);
+    const token = genToken(user._id);
 
     await sendwelcomeEmail(user.email, user.username);
 
     const { password: _, ...userWithoutPassword } = user._doc;
 
     return res.status(200).json({
-      data: userWithoutPassword,
+      data: { ...userWithoutPassword, token },
       success: true,
       message: "users email verified successfully",
     });
@@ -146,11 +146,11 @@ export const signin = async (req, res) => {
       .json({ data: null, success: false, message: "incorrect password" });
   }
 
-  genandsetToken(user._id, res);
+  const token = genToken(user._id);
   const { password: _, ...userWithoutPassword } = user._doc;
 
   return res.status(200).json({
-    data: userWithoutPassword,
+    data: { ...userWithoutPassword, token },
     success: true,
     message: "user logged in successfully",
   });
@@ -255,7 +255,6 @@ export const checkAuth = async (req, res) => {
 };
 
 export const logOut = (req, res) => {
-  res.clearCookie("token", { httpOnly: true, maxAge: 0 });
   return res
     .status(200)
     .json({ data: null, success: true, message: "user Logout successfully" });

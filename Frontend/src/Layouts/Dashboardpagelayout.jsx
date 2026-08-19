@@ -30,16 +30,16 @@ const Dashboardpagelayout = () => {
             onClick={() => setWatchlistOpen(false)}
           />
           <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl animate-slide-up max-h-[85vh] flex flex-col">
-            <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
+            <div className="relative flex-shrink-0 flex items-center justify-center pt-3 pb-1">
               <div className="w-10 h-1 rounded-full bg-slate-300"></div>
-            </div>
-            <div className="relative flex-1 overflow-hidden">
               <button
                 onClick={() => setWatchlistOpen(false)}
-                className="absolute top-2 right-3 z-10 p-2 rounded-full bg-white/80 hover:bg-white text-slate-600 shadow-sm"
+                className="absolute top-2.5 right-3 z-20 p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
               >
-                <i className="fa-solid fa-xmark text-lg"></i>
+                <i className="fa-solid fa-xmark text-xl"></i>
               </button>
+            </div>
+            <div className="relative flex-1 min-h-0 overflow-hidden flex flex-col">
               <Watchlist />
             </div>
           </div>
@@ -48,30 +48,6 @@ const Dashboardpagelayout = () => {
 
       {/* Main content area */}
       <div className="col-span-5 h-screen overflow-auto scrollbar-hide">
-        {/* Mobile header with watchlist toggle */}
-        <div className="sm:hidden flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white sticky top-0 z-30">
-          <button
-            onClick={() => setWatchlistOpen(true)}
-            className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors"
-          >
-            <i className="fa-solid fa-magnifying-plus text-blue-600"></i>
-            <span>Watchlist</span>
-            {!isLoading && stocksData.length > 0 && (
-              <span className="ml-1 px-1.5 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-600 rounded-full">
-                {stocksData.length}
-              </span>
-            )}
-          </button>
-          <img
-            src="https://cdn.zerodha.com/static/images/kite-logo.svg"
-            alt="Kite"
-            className="h-5"
-            onError={(e) => {
-              e.target.src = "https://kite.zerodha.com/static/images/kite-logo.svg";
-            }}
-          />
-        </div>
-
         <Outlet />
       </div>
 

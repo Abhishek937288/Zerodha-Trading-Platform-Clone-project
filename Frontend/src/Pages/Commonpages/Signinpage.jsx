@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { userAuthstore } from "../../Store/authStore";
 
 const Signinpage = () => {
-  const { setUser } = userAuthstore();
+  const { setUser, checkAuth } = userAuthstore();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,9 +27,10 @@ const Signinpage = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: signinFn,
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       toast.success(`${response.message}`);
       setUser(response.data);
+      await checkAuth();
       navigate("/");
     },
     onError: (error) => {

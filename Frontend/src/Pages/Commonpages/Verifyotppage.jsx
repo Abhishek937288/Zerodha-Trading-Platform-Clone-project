@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { userAuthstore } from "../../Store/authStore";
 
 const Verifyotppage = () => {
-  const { setUser } = userAuthstore();
+  const { setUser, checkAuth } = userAuthstore();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,9 +25,10 @@ const Verifyotppage = () => {
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: verifyEmailFn,
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       toast.success(`${response.message}`);
       setUser(response.data);
+      await checkAuth();
       navigate("/");
     },
     onError: (error) => {

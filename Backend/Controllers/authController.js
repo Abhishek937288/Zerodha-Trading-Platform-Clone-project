@@ -106,8 +106,10 @@ export const verifyemail = async (req, res) => {
 
     await sendwelcomeEmail(user.email, user.username);
 
+    const { password: _, ...userWithoutPassword } = user._doc;
+
     return res.status(200).json({
-      data: null,
+      data: userWithoutPassword,
       success: true,
       message: "users email verified successfully",
     });
@@ -150,7 +152,7 @@ export const signin = async (req, res) => {
 
   return res.status(200).json({
     data: userWithoutPassword,
-    success: false,
+    success: true,
     message: "user logged in successfully",
   });
 };

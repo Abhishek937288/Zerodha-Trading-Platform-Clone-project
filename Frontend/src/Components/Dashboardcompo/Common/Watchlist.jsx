@@ -1,39 +1,48 @@
-import React from "react";
+import React, { useEffect, useMemo, useRef, useCallback } from "react";
 import Topbar from "../Dashboard/Topbar";
-
 import WatchListItems from "../Dashboard/WatchListItems";
-
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-
-import { io } from "socket.io-client";
 import WatchListCharts from "../Dashboard/WatchListCharts";
-
 import Loading from "@/Components/Commoncompo/Common/Loading";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-const socket = io(import.meta.env.VITE_BACKEND_URL);
+import { useWatchlistStore } from "@/Store/watchlistStore";
 
 const DEBOUNCE_MS = 300;
 
 const Watchlist = () => {
-  const [isLoading, setisLoading] = useState(true);
-  const [stocksData, setStocksData] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [chartOpen, setChartOpen] = useState(false);
+  const {
+    stocksData,
+    isLoading,
+    searchInput,
+    debouncedQuery,
+    chartOpen,
+    setSearchInput,
+    setDebouncedQuery,
+    setChartOpen,
+    toggleForm,
+    initSocket,
+    cleanupSocket,
+  } = useWatchlistStore();
+
   const debounceTimer = useRef(null);
 
-  const handleSearch = useCallback((value) => {
-    setSearchInput(value);
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      setDebouncedQuery(value);
-    }, DEBOUNCE_MS);
-  }, []);
+  const handleSearch = useCallback(
+    (value) => {
+      setSearchInput(value);
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+      debounceTimer.current = setTimeout(() => {
+        setDebouncedQuery(value);
+      }, DEBOUNCE_MS);
+    },
+    [setSearchInput, setDebouncedQuery]
+  );
 
   useEffect(() => {
+    initSocket();
     return () => {
+      cleanupSocket();
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filteredStocks = useMemo(() => {
@@ -45,52 +54,12 @@ const Watchlist = () => {
     });
   }, [stocksData, debouncedQuery]);
 
-  const closeAllForm = () => {
-    setStocksData((prevData) =>
-      prevData.map((stock) => ({ ...stock, isOpen: false }))
-    );
-  };
-
-  const toggleForm = (id, state = true) => {
-    if (id == undefined) return;
-    closeAllForm();
-    setStocksData((stocks) => {
-      return stocks.map((stock, i) => {
-        if (i == id) {
-          return { ...stock, isOpen: state };
-        }
-        return stock;
-      });
-    });
-  };
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected with ID:", socket.id);
-    });
-
-    socket.on("stocksData", (data) => {
-      setStocksData(data.map((s) => ({ ...s, isOpen: false })));
-      setisLoading(false);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-
-    return () => {
-      socket.off("connect");
-      socket.off("stocksData");
-      socket.off("disconnect");
-    };
-  }, []);
-
   if (isLoading) {
     return <Loading />;
   }
 
   return (
-    <div className="h-screen flex flex-col bg-white overflow-hidden">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       <Topbar />
       <div className="px-3 py-2 border-b border-slate-200 flex-shrink-0">
         <div className="relative flex items-center">
@@ -131,7 +100,7 @@ const Watchlist = () => {
           </div>
         ) : (
           <div className="flex flex-col">
-            {filteredStocks.map((stock, index) => {
+            {filteredStocks.map((stock) => {
               const originalIndex = stocksData.findIndex(
                 (s) => s.name === stock.name
               );

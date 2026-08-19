@@ -13,18 +13,11 @@ import http from "http";
 import { Server } from "socket.io";
 import { stockData, updateStockPrice } from "./Utils/stocksData.js";
 
-import path from "path";
-import { fileURLToPath } from "url";
-
 const PORT = process.env.PORT || 5000;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const app = express();
 const server = http.createServer(app);
-
-// ESM dirname fix
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(express.json());
@@ -67,15 +60,6 @@ app.use("/api/dashboard", dashboardRoutes);
 
 // DB
 connectDb();
-
-if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "client");
-  app.use(express.static(frontendPath));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
-  });
-}
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

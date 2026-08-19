@@ -10,11 +10,9 @@ import WatchListCharts from "../Dashboard/WatchListCharts";
 
 import Loading from "@/Components/Commoncompo/Common/Loading";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-const socket = io(
-  import.meta.env.MODE === "production"
-    ? window.location.origin
-    : import.meta.env.VITE_BACKEND_URL
-);
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
+  withCredentials: true,
+});
 
 const DEBOUNCE_MS = 300;
 

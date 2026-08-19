@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { userAuthstore } from "../../Store/authStore";
 
 const Signinpage = () => {
-  const { setUser, checkAuth } = userAuthstore();
+  const { setUser } = userAuthstore();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,22 +27,18 @@ const Signinpage = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: signinFn,
-    onSuccess: async (response) => {
+    onSuccess: (response) => {
       toast.success(`${response.message}`);
       setUser(response.data);
-      await checkAuth();
       navigate("/");
     },
     onError: (error) => {
-  const message =
-    error?.response?.data?.message ||
-    error?.message ||
-    "Something went wrong";
-
-  console.log(message);
-  toast.error(message);
-},
-
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong";
+      toast.error(message);
+    },
   });
 
   const handleSubmit = (e) => {

@@ -35,7 +35,7 @@ export const newPasswordFn = async ({ newPassword, forgotpasstoken }) => {
   const { data } = await axios.post(
     url,
     { newPassword },
-    { withCredentials: true }
+    { withCredentials: true },
   );
   return data;
 };

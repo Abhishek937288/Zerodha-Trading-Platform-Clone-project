@@ -27,8 +27,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({
         data: null,
         success: false,
-        message:
-          "Signup request received. If this email is not verified, a new token has been sent",
+        message: "An account with this email already exists. Please sign in instead.",
       });
     } else {
       const salt = await bcrypt.genSalt(10);
@@ -40,14 +39,14 @@ export const signup = async (req, res) => {
       existingUser.verificationToken = verifyToken;
       existingUser.verificationTokenExpiresAt = verifyokenEpiresAt;
       await existingUser.save();
-      const response = await sendVerificationEmail(email, verifyToken);
+      await sendVerificationEmail(email, verifyToken);
 
       const { password: _, ...existingUserWithoutpassword } = existingUser._doc;
 
       return res.status(200).json({
         data: existingUserWithoutpassword,
         success: true,
-        message: "token sent succesfully",
+        message: "A new verification token has been sent to your email. Please use the latest token.",
       });
     }
   }
@@ -65,14 +64,14 @@ export const signup = async (req, res) => {
   user.verificationToken = verifyToken;
   user.verificationTokenExpiresAt = verifyokenEpiresAt;
   await user.save();
-  const response = await sendVerificationEmail(email, verifyToken);
+  await sendVerificationEmail(email, verifyToken);
 
   const { password: _, ...userWithoutpassword } = user._doc;
 
   return res.status(200).json({
     data: userWithoutpassword,
     success: true,
-    message: "token sent succesfully",
+    message: "Verification token sent to your email. Please check your inbox.",
   });
 };
 

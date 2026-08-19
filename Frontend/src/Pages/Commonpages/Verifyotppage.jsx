@@ -3,13 +3,13 @@ import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { assets } from "@/assets/assets";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { verifyEmailFn } from "@/Mutation/authMutationFn";
 import toast from "react-hot-toast";
 import { userAuthstore } from "../../Store/authStore";
 
 const Verifyotppage = () => {
-  const { setUser, checkAuth } = userAuthstore();
+  const { setUser } = userAuthstore();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,17 +23,15 @@ const Verifyotppage = () => {
     }));
   };
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: verifyEmailFn,
-    onSuccess: async (response) => {
+    onSuccess: (response) => {
       toast.success(`${response.message}`);
       setUser(response.data);
-      await checkAuth();
       navigate("/");
     },
     onError: (error) => {
-      console.log(error.response.data.message);
-      toast.error(`${error.response?.data?.message}`);
+      toast.error(`${error.response?.data?.message || "Something went wrong"}`);
     },
   });
 
@@ -71,7 +69,7 @@ const Verifyotppage = () => {
               An authentication code has been sent to your mail.
             </p>
           </div>
-          <form className="">
+          <form className="" onSubmit={handleSubmit}>
             <div>
               <div className="relative">
                 <input
@@ -93,10 +91,11 @@ const Verifyotppage = () => {
             </div>
             <div className="mt-4">
               <button
-                className="w-full outline-none bg-blue-600 text-white rounded-lg px-5 py-2 hover:bg-blue-700 transition"
-                onClick={handleSubmit}
+                type="submit"
+                className="w-full outline-none bg-blue-600 text-white rounded-lg px-5 py-2 hover:bg-blue-700 transition disabled:bg-blue-400 disabled:cursor-not-allowed"
+                disabled={isPending}
               >
-                Verify
+                {isPending ? "Verifying..." : "Verify"}
               </button>
             </div>
           </form>

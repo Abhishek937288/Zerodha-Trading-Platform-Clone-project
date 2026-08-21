@@ -23,32 +23,39 @@ export const signup = async (req, res) => {
   const { email, password, username } = value;
   const existingUser = await userModel.findOne({ email });
   if (existingUser) {
-    if (existingUser.isVerified) {
-      return res.status(400).json({
-        data: null,
-        success: false,
-        message: "An account with this email already exists. Please sign in instead.",
-      });
-    } else {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-      const verifyToken = verificationToken();
-      const verifyokenEpiresAt = genTokenExp();
-      existingUser.username = username;
-      existingUser.password = hashedPassword;
-      existingUser.verificationToken = verifyToken;
-      existingUser.verificationTokenExpiresAt = verifyokenEpiresAt;
-      await existingUser.save();
-      await sendVerificationEmail(email, verifyToken);
+    // Email verification disabled for production (frontend on Vercel, backend on Render).
+    // Uncomment this block to re-enable verification email for unverified accounts.
+    // if (existingUser.isVerified) {
+    //   return res.status(400).json({
+    //     data: null,
+    //     success: false,
+    //     message: "An account with this email already exists. Please sign in instead.",
+    //   });
+    // } else {
+    //   const salt = await bcrypt.genSalt(10);
+    //   const hashedPassword = await bcrypt.hash(password, salt);
+    //   const verifyToken = verificationToken();
+    //   const verifyokenEpiresAt = genTokenExp();
+    //   existingUser.username = username;
+    //   existingUser.password = hashedPassword;
+    //   existingUser.verificationToken = verifyToken;
+    //   existingUser.verificationTokenExpiresAt = verifyokenEpiresAt;
+    //   await existingUser.save();
+    //   await sendVerificationEmail(email, verifyToken);
 
-      const { password: _, ...existingUserWithoutpassword } = existingUser._doc;
+    //   const { password: _, ...existingUserWithoutpassword } = existingUser._doc;
 
-      return res.status(200).json({
-        data: existingUserWithoutpassword,
-        success: true,
-        message: "A new verification token has been sent to your email. Please use the latest token.",
-      });
-    }
+    //   return res.status(200).json({
+    //     data: existingUserWithoutpassword,
+    //     success: true,
+    //     message: "A new verification token has been sent to your email. Please use the latest token.",
+    //   });
+    // }
+    return res.status(400).json({
+      data: null,
+      success: false,
+      message: "An account with this email already exists. Please sign in instead.",
+    });
   }
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -57,21 +64,26 @@ export const signup = async (req, res) => {
     username,
     email,
     password: hashedPassword,
+    isVerified: true,
   });
 
-  const verifyToken = verificationToken();
-  const verifyokenEpiresAt = genTokenExp();
-  user.verificationToken = verifyToken;
-  user.verificationTokenExpiresAt = verifyokenEpiresAt;
+  // Email verification disabled for production (frontend on Vercel, backend on Render).
+  // Uncomment below along with the /verifyemail route and Verifyotppage to re-enable.
+  // const verifyToken = verificationToken();
+  // const verifyokenEpiresAt = genTokenExp();
+  // user.verificationToken = verifyToken;
+  // user.verificationTokenExpiresAt = verifyokenEpiresAt;
+  // user.isVerified = false;
   await user.save();
-  await sendVerificationEmail(email, verifyToken);
+  // await sendVerificationEmail(email, verifyToken);
 
+  const token = genToken(user._id);
   const { password: _, ...userWithoutpassword } = user._doc;
 
   return res.status(200).json({
-    data: userWithoutpassword,
+    data: { ...userWithoutpassword, token },
     success: true,
-    message: "Verification token sent to your email. Please check your inbox.",
+    message: "user registered successfully",
   });
 };
 

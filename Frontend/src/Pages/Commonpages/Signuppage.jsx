@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signupFn } from "@/Mutation/authMutationFn";
 import toast from "react-hot-toast";
+import { userAuthstore } from "../../Store/authStore";
 
 const Signuppage = () => {
+  const { setUser } = userAuthstore();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +30,12 @@ const Signuppage = () => {
     mutationFn: signupFn,
     onSuccess: (response) => {
       toast.success(`${response.message}`);
-      navigate("/Verifyotppage");
+      // Email verification disabled for production (frontend on Vercel, backend on Render).
+      // Uncomment to re-enable along with the /verifyemail route and Verifyotppage.
+      // navigate("/Verifyotppage");
+      userAuthstore.getState().setToken(response.data.token);
+      setUser(response.data);
+      navigate("/");
       setFormData({ username: "", email: "", password: "" });
     },
     onError: (error) => {

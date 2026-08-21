@@ -14,7 +14,9 @@ import Positionspage from "./Pages/Dashboardpages/Positionspage";
 
 import Signuppage from "./Pages/Commonpages/Signuppage";
 import Signinpage from "./Pages/Commonpages/Signinpage";
-import Verifyotppage from "./Pages/Commonpages/Verifyotppage";
+// Email verification disabled for production (frontend on Vercel, backend on Render).
+// Uncomment to re-enable along with the /verifyemail route and signup verification logic.
+// import Verifyotppage from "./Pages/Commonpages/Verifyotppage";
 import Forgotpasspage from "./Pages/Commonpages/Forgotpasspage";
 import Newpasswordpage from "./Pages/Commonpages/Newpasswordpage";
 
@@ -56,7 +58,8 @@ function App() {
           <Route element={<PublicLayout/>}>
             <Route path="/Signuppage" element={<Signuppage />} />
             <Route path="/Signinpage" element={<Signinpage />} />
-            <Route path="/Verifyotppage" element={<Verifyotppage />} />
+            {/* Email verification disabled for production (frontend on Vercel, backend on Render). */}
+            {/* <Route path="/Verifyotppage" element={<Verifyotppage />} /> */}
             <Route path="/Forgotpasspage" element={<Forgotpasspage />} />
             <Route
               path="/Newpasswordpage/:forgotpasstoken"

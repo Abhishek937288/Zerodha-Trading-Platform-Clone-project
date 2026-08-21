@@ -13,7 +13,9 @@ import { Router } from "express";
 const router = Router();
 
 router.post("/signup", signup);
-router.post("/verifyemail", verifyemail);
+// Email verification disabled for production (frontend on Vercel, backend on Render).
+// Uncomment to re-enable along with the verification logic in authController signup.
+// router.post("/verifyemail", verifyemail);
 router.post("/signin", signin);
 router.post("/forgotpassword", forgotpassword);
 router.post("/newPassword/:forgotpasstoken", newPassword);

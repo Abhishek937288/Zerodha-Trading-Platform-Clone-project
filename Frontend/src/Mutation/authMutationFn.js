@@ -12,11 +12,13 @@ export const signupFn = async (formdata) => {
   return data;
 };
 
-export const verifyEmailFn = async (code) => {
-  const url = `${backendUrl}/api/auth/verifyemail`;
-  const { data } = await axios.post(url, code);
-  return data;
-};
+// Email verification disabled for production (frontend on Vercel, backend on Render).
+// Uncomment to re-enable along with the /verifyemail route and Verifyotppage.
+// export const verifyEmailFn = async (code) => {
+//   const url = `${backendUrl}/api/auth/verifyemail`;
+//   const { data } = await axios.post(url, code);
+//   return data;
+// };
 
 export const signinFn = async (formdata) => {
   const url = `${backendUrl}/api/auth/signin`;
